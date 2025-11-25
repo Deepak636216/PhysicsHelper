@@ -31,7 +31,7 @@ def test_gemini_connection():
 
         # Test simple generation
         response = client.models.generate_content(
-            model='gemini-2.0-flash-exp',
+            model='gemini-2.5-flash-lite',
             contents='Say "Hello from JEE-Helper!" in one short sentence.'
         )
 
