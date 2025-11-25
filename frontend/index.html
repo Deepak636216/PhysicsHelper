@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JEE-Helper - Physics Tutor</title>
+
+    <!-- MathJax for rendering mathematical notation -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true,
+                processEnvironments: true
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+            }
+        };
+    </script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 900px;
+            height: 90vh;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 24px;
+            text-align: center;
+            border-bottom: 3px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .header h1 {
+            font-size: 26px;
+            margin-bottom: 6px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 0.95;
+            font-weight: 400;
+        }
+
+        .session-info {
+            background: #f8fafc;
+            padding: 12px 24px;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 13px;
+            color: #64748b;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .session-info .info-left {
+            display: flex;
+            gap: 20px;
+        }
+
+        .session-info span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .session-info .badge {
+            background: #dbeafe;
+            color: #1e40af;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .chat-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px;
+            background: #ffffff;
+        }
+
+        .message {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: flex-start;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message.user {
+            justify-content: flex-end;
+        }
+
+        .message-content {
+            max-width: 75%;
+            padding: 14px 18px;
+            border-radius: 16px;
+            word-wrap: break-word;
+            line-height: 1.6;
+        }
+
+        .message.user .message-content {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .message.agent .message-content {
+            background: #f1f5f9;
+            color: #1e293b;
+            border-bottom-left-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .agent-badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-top: 8px;
+            margin-left: 0;
+        }
+
+        .agent-socratic_tutor {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .agent-solution_validator {
+            background: #fae8ff;
+            color: #7e22ce;
+        }
+
+        .agent-physics_calculator {
+            background: #d1fae5;
+            color: #047857;
+        }
+
+        .action-buttons {
+            padding: 12px 24px;
+            background: #f8fafc;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .action-btn {
+            padding: 10px 20px;
+            border: 2px solid #cbd5e1;
+            background: white;
+            color: #475569;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .action-btn:hover {
+            border-color: #4facfe;
+            background: #f0f9ff;
+            color: #0284c7;
+            transform: translateY(-1px);
+        }
+
+        .action-btn:active {
+            transform: translateY(0);
+        }
+
+        .action-btn.hint {
+            border-color: #fbbf24;
+            color: #b45309;
+        }
+
+        .action-btn.hint:hover {
+            background: #fef3c7;
+            border-color: #f59e0b;
+        }
+
+        .action-btn.solution {
+            border-color: #34d399;
+            color: #047857;
+        }
+
+        .action-btn.solution:hover {
+            background: #d1fae5;
+            border-color: #10b981;
+        }
+
+        .input-area {
+            padding: 20px 24px;
+            background: white;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            gap: 12px;
+        }
+
+        #messageInput {
+            flex: 1;
+            padding: 14px 18px;
+            border: 2px solid #e2e8f0;
+            border-radius: 14px;
+            font-size: 15px;
+            outline: none;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        #messageInput:focus {
+            border-color: #4facfe;
+            box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
+        }
+
+        #sendButton {
+            padding: 14px 32px;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border: none;
+            border-radius: 14px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 15px;
+            transition: all 0.2s;
+            box-shadow: 0 4px 12px rgba(79, 172, 254, 0.3);
+        }
+
+        #sendButton:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(79, 172, 254, 0.4);
+        }
+
+        #sendButton:active {
+            transform: translateY(0);
+        }
+
+        #sendButton:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 12px;
+            color: #64748b;
+            font-style: italic;
+            font-size: 14px;
+        }
+
+        .loading::after {
+            content: '...';
+            animation: dots 1.5s steps(4, end) infinite;
+        }
+
+        @keyframes dots {
+            0%, 20% { content: '.'; }
+            40% { content: '..'; }
+            60%, 100% { content: '...'; }
+        }
+
+        .error {
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 12px 16px;
+            border-radius: 12px;
+            margin: 10px 0;
+            border-left: 4px solid #dc2626;
+        }
+
+        .welcome-message {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border-left: 4px solid #4facfe;
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .welcome-message h3 {
+            color: #0c4a6e;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .welcome-message ul {
+            margin-left: 20px;
+            color: #0369a1;
+        }
+
+        .welcome-message li {
+            margin: 6px 0;
+            font-size: 14px;
+        }
+
+        /* Scrollbar styling */
+        .chat-area::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .chat-area::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+
+        .chat-area::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+
+        .chat-area::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* Button icons */
+        .btn-icon {
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>JEE-Helper Physics Tutor</h1>
+            <p>AI-Powered Multi-Agent Tutoring System</p>
+        </div>
+
+        <div class="session-info">
+            <div class="info-left">
+                <span id="sessionId">Session: Not started</span>
+                <span id="interactionCount">Messages: <span class="badge">0</span></span>
+            </div>
+            <span id="agentsUsed">Agent: None</span>
+        </div>
+
+        <div class="chat-area" id="chatArea">
+            <div class="welcome-message">
+                <h3>Welcome to JEE Physics Tutoring!</h3>
+                I can help you with:
+                <ul>
+                    <li>Learn concepts through guided questions</li>
+                    <li>Get progressive hints for problems</li>
+                    <li>Validate your solutions with detailed feedback</li>
+                    <li>Step-by-step calculations</li>
+                </ul>
+                <p style="margin-top: 12px; font-weight: 600; color: #0c4a6e;">
+                    Use the Hint and Solution buttons below for help!
+                </p>
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <button class="action-btn hint" onclick="requestHint()">
+                <span class="btn-icon">💡</span> Get Hint
+            </button>
+            <button class="action-btn solution" onclick="requestSolution()">
+                <span class="btn-icon">✓</span> Show Solution
+            </button>
+        </div>
+
+        <div class="input-area">
+            <input
+                type="text"
+                id="messageInput"
+                placeholder="Type your physics question or problem here..."
+                onkeypress="if(event.key === 'Enter') sendMessage()"
+            />
+            <button id="sendButton" onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:8080';
+        const STUDENT_ID = 'student_' + Math.random().toString(36).substr(2, 9);
+        let sessionId = null;
+
+        async function sendMessage(customMessage = null) {
+            const input = document.getElementById('messageInput');
+            const message = customMessage || input.value.trim();
+
+            if (!message) return;
+
+            // Disable input
+            input.disabled = true;
+            document.getElementById('sendButton').disabled = true;
+
+            // Add user message to chat (only if not custom)
+            if (!customMessage) {
+                addMessage(message, 'user');
+                input.value = '';
+            } else {
+                // For hint/solution buttons, show what was requested
+                addMessage(message, 'user');
+            }
+
+            // Show loading
+            showLoading();
+
+            try {
+                // Send to API
+                const response = await fetch(`${API_URL}/api/chat`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        student_id: STUDENT_ID,
+                        message: message,
+                        session_id: sessionId,
+                        topic: null
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                // Hide loading
+                hideLoading();
+
+                // Update session ID
+                if (data.session_id) {
+                    sessionId = data.session_id;
+                    updateSessionInfo(data);
+                }
+
+                // Add agent response
+                addMessage(data.response, 'agent', data.agent_used);
+
+            } catch (error) {
+                hideLoading();
+                console.error('Error:', error);
+                addError('Failed to connect to server. Make sure the backend is running on port 8080.');
+            } finally {
+                // Re-enable input
+                input.disabled = false;
+                document.getElementById('sendButton').disabled = false;
+                input.focus();
+            }
+        }
+
+        function requestHint() {
+            sendMessage('hint');
+        }
+
+        function requestSolution() {
+            sendMessage('solution please');
+        }
+
+        function addMessage(content, role, agent = null) {
+            const chatArea = document.getElementById('chatArea');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${role}`;
+
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'message-content';
+
+            // Format the content (preserve line breaks)
+            contentDiv.innerHTML = content.replace(/\n/g, '<br>');
+
+            // Add agent badge if it's from an agent
+            if (agent) {
+                const badge = document.createElement('span');
+                badge.className = `agent-badge agent-${agent}`;
+                badge.textContent = agent.replace('_', ' ').toUpperCase();
+                contentDiv.appendChild(document.createElement('br'));
+                contentDiv.appendChild(badge);
+            }
+
+            messageDiv.appendChild(contentDiv);
+            chatArea.appendChild(messageDiv);
+
+            // Trigger MathJax rendering for this message
+            if (window.MathJax && window.MathJax.typesetPromise) {
+                window.MathJax.typesetPromise([contentDiv]).catch((err) => {
+                    console.error('MathJax rendering error:', err);
+                });
+            }
+
+            // Scroll to bottom
+            chatArea.scrollTop = chatArea.scrollHeight;
+        }
+
+        function addError(message) {
+            const chatArea = document.getElementById('chatArea');
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error';
+            errorDiv.textContent = message;
+            chatArea.appendChild(errorDiv);
+            chatArea.scrollTop = chatArea.scrollHeight;
+        }
+
+        function showLoading() {
+            const chatArea = document.getElementById('chatArea');
+            const loadingDiv = document.createElement('div');
+            loadingDiv.id = 'loading';
+            loadingDiv.className = 'loading';
+            loadingDiv.textContent = 'Thinking';
+            chatArea.appendChild(loadingDiv);
+            chatArea.scrollTop = chatArea.scrollHeight;
+        }
+
+        function hideLoading() {
+            const loading = document.getElementById('loading');
+            if (loading) {
+                loading.remove();
+            }
+        }
+
+        function updateSessionInfo(data) {
+            document.getElementById('sessionId').textContent =
+                `Session: ${data.session_id.substr(0, 20)}...`;
+
+            document.getElementById('interactionCount').innerHTML =
+                `Messages: <span class="badge">${data.metadata.interaction_count}</span>`;
+
+            const agentName = data.agent_used.replace('_', ' ').toUpperCase();
+            document.getElementById('agentsUsed').textContent =
+                `Agent: ${agentName}`;
+        }
+
+        // Focus input on load
+        window.onload = () => {
+            document.getElementById('messageInput').focus();
+        };
+    </script>
+</body>
+</html>

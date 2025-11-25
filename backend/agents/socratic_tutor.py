@@ -42,54 +42,65 @@ class SocraticTutorAgent:
         self.calculator = physics_calculator
         self.system_instruction = self._create_system_instruction()
         self.conversation_history = []
+        self.hints_given = 0  # Track hint count
+        self.current_problem = None  # Track current problem
 
     def _create_system_instruction(self) -> str:
         """Create the system instruction for the Socratic tutor agent."""
         return """You are a SocraticTutor Agent - an expert JEE Physics tutor who teaches using the Socratic method.
 
 Your Teaching Philosophy:
-- NEVER give direct answers or complete solutions
 - Guide students through discovery with thoughtful questions
 - Break complex problems into manageable steps
 - Encourage critical thinking and conceptual understanding
 - Be patient, supportive, and encouraging
+- RECOGNIZE and CELEBRATE when students give correct answers
+- Provide solutions when explicitly requested after hints are exhausted
 
 Your Capabilities:
 1. **Conceptual Guidance**: Ask probing questions to build understanding
-2. **Problem Access**: Can recommend problems from the problem bank
-3. **Calculation Support**: Can verify calculations (but prefer guiding student to solve)
-4. **Hint Provision**: Give strategic hints that lead to discovery
+2. **Progress Tracking**: Recognize when student demonstrates understanding
+3. **Hint System**: Provide 3 progressive hints before revealing solution
+4. **Solution Reveal**: Provide full solution when requested after hints
 
 When Student Asks For:
-- "Practice problem" → Suggest topics/difficulties, guide problem selection
-- "Help solving" → Ask what they understand, guide with questions
-- "Is this correct?" → Ask them to explain their reasoning first
-- "Calculate this" → Guide them through the steps, or delegate if verification needed
-- "Hint" → Give minimal hint that prompts thinking
+- "hint" or "give me a hint" → Provide Hint 1 (minimal guidance)
+- "hint" again → Provide Hint 2 (moderate guidance)
+- "hint" third time → Provide Hint 3 (substantial guidance)
+- "solution" or "show solution" → If hints exhausted or student demonstrates 50%+ understanding, provide complete solution
+- "I'm just testing" or "solution please" → Acknowledge their request and provide solution
+
+Recognizing Correct Answers:
+- If student provides a CORRECT formula (e.g., "I = mR²"), ACKNOWLEDGE IT immediately
+- Example: "Excellent! You've got it - I = mR² is indeed the correct formula for moment of inertia of a ring!"
+- Then ask if they want to: (a) understand derivation, (b) apply it to solve, or (c) move to next concept
+
+Progress Tracking:
+- If student correctly identifies 50%+ of key concepts, acknowledge their understanding
+- Offer choice: continue guided discovery OR see complete solution
 
 Teaching Approach:
 1. Start by understanding what the student knows
-2. Identify gaps in understanding
-3. Ask questions that lead to those insights
-4. Build on correct thinking
-5. Gently correct misconceptions with questions
+2. RECOGNIZE correct thinking immediately
+3. For incorrect responses, guide with questions
+4. Track hint requests (max 3 before solution)
+5. Be flexible - respect when student wants direct solution
 
 Response Style:
 - Ask 1-2 questions per response
-- Acknowledge correct thinking enthusiastically
+- **CELEBRATE correct answers enthusiastically**
 - Never be discouraging
 - Use simple language
-- Include relevant physics concepts
-- Encourage experimentation
+- Respect student's learning preferences
 
 Example Interaction:
-Student: "How do I solve this kinematics problem?"
-You: "Great question! Let's think about this together. What information does the problem give you? And what are you trying to find?"
+Student: "I = mR²"
+You: "Absolutely correct! That's the moment of inertia formula for a ring. You've nailed it! Would you like to (a) understand how it's derived, (b) apply it to the problem, or (c) move on?"
 
-Student: "I have velocity and time, need distance"
-You: "Perfect! You've identified the known and unknown. Now, what relationship connects distance, velocity, and time? Have you seen any formulas that relate these?"
+Student: "solution please"
+You: "I understand you'd like the solution. Let me provide that for you: [complete solution]. Would you like me to explain any particular step?"
 
-Remember: You're a guide, not a solution provider. The goal is student discovery and understanding!"""
+Remember: Socratic method is about GUIDED discovery, not stubborn refusal to help. Adapt to student needs!"""
 
     def teach(self, message: str, context: Optional[dict] = None) -> str:
         """
@@ -103,23 +114,70 @@ Remember: You're a guide, not a solution provider. The goal is student discovery
             Socratic response guiding the student
         """
         try:
-            # Build conversation context
-            conversation_context = self._build_context(message, context)
+            # Detect hint request
+            message_lower = message.lower()
+            is_hint_request = any(word in message_lower for word in ["hint", "clue", "help me"])
+            is_solution_request = any(word in message_lower for word in ["solution", "answer", "show me", "give me the solution"])
 
-            # Add to conversation history
-            self.conversation_history.append({
+            # Track current problem
+            if context and "current_problem" in context:
+                if self.current_problem != context["current_problem"]:
+                    self.current_problem = context["current_problem"]
+                    self.hints_given = 0  # Reset hints for new problem
+
+            # Build chat history for Gemini
+            chat_contents = []
+
+            # Add conversation history
+            for entry in self.conversation_history:
+                if entry["role"] == "user":
+                    chat_contents.append({
+                        "role": "user",
+                        "parts": [{"text": entry["message"]}]
+                    })
+                else:
+                    chat_contents.append({
+                        "role": "model",
+                        "parts": [{"text": entry["message"]}]
+                    })
+
+            # Add current message with context
+            current_message = message
+
+            # Add context information if provided
+            if context:
+                context_info = []
+                if "current_problem" in context:
+                    context_info.append(f"[Current Problem: {context['current_problem']}]")
+                if "topic" in context:
+                    context_info.append(f"[Topic: {context['topic']}]")
+                if context_info:
+                    current_message = "\n".join(context_info) + "\n\n" + message
+
+            # Add hint/solution tracking
+            if is_hint_request:
+                self.hints_given += 1
+                current_message += f"\n\n[SYSTEM: This is hint request #{self.hints_given}. Provide Hint {min(self.hints_given, 3)}.]"
+
+            if is_solution_request:
+                if self.hints_given >= 2:
+                    current_message += "\n\n[SYSTEM: Student has requested solution after hints. Provide complete solution now.]"
+                else:
+                    current_message += f"\n\n[SYSTEM: Student wants solution but has only used {self.hints_given} hints. Suggest using hints first, but respect their choice if they insist.]"
+
+            # Add current message to chat
+            chat_contents.append({
                 "role": "user",
-                "message": message,
-                "context": context
+                "parts": [{"text": current_message}]
             })
 
-            # Generate response
+            # Generate response using chat mode
             response = self.client.models.generate_content(
                 model=self.model,
-                contents=conversation_context,
+                contents=chat_contents,
                 config=types.GenerateContentConfig(
                     system_instruction=self.system_instruction,
-                    temperature=0.7,  # Higher temperature for varied teaching responses
+                    temperature=0.7,
                     top_p=0.95,
                     max_output_tokens=1024,
                 )
@@ -127,9 +185,17 @@ Remember: You're a guide, not a solution provider. The goal is student discovery
 
             response_text = response.text
 
+            # Clean up any leaked prefixes
+            response_text = response_text.replace("Student:", "").replace("You:", "").strip()
+
             # Add to conversation history
             self.conversation_history.append({
-                "role": "agent",
+                "role": "user",
+                "message": message,
+                "context": context
+            })
+            self.conversation_history.append({
+                "role": "model",
                 "message": response_text
             })
 
