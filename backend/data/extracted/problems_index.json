@@ -1,0 +1,54 @@
+{
+  "generated_at": "2025-11-24T21:46:47.269890",
+  "total_problems": 3,
+  "topics": {
+    "kinematics": 1,
+    "dynamics": 1,
+    "energy": 1
+  },
+  "difficulties": {
+    "easy": 1,
+    "medium": 2
+  },
+  "problems": [
+    {
+      "id": "kinematics_001",
+      "topic": "kinematics",
+      "difficulty": "easy",
+      "question": "A car moves with a constant velocity of 20 m/s. How far does it travel in 5 seconds?",
+      "solution": "Using distance = velocity × time: d = 20 m/s × 5 s = 100 m",
+      "hints": [
+        "Use the formula: distance = velocity × time",
+        "Make sure units are consistent"
+      ],
+      "answer": "100 m",
+      "source_file": "sample_problems"
+    },
+    {
+      "id": "dynamics_001",
+      "topic": "dynamics",
+      "difficulty": "medium",
+      "question": "A block of mass 5 kg is pushed with a force of 20 N. If there is no friction, what is the acceleration?",
+      "solution": "Using Newton's second law F = ma: a = F/m = 20 N / 5 kg = 4 m/s²",
+      "hints": [
+        "Use Newton's second law: F = ma",
+        "Rearrange to find acceleration: a = F/m"
+      ],
+      "answer": "4 m/s²",
+      "source_file": "sample_problems"
+    },
+    {
+      "id": "energy_001",
+      "topic": "energy",
+      "difficulty": "medium",
+      "question": "A ball of mass 0.5 kg is thrown upward with an initial velocity of 10 m/s. What is its initial kinetic energy? (g = 10 m/s²)",
+      "solution": "Using KE = (1/2)mv²: KE = 0.5 × 0.5 kg × (10 m/s)² = 25 J",
+      "hints": [
+        "Use the kinetic energy formula: KE = (1/2)mv²",
+        "Square the velocity before multiplying"
+      ],
+      "answer": "25 J",
+      "source_file": "sample_problems"
+    }
+  ]
+}
