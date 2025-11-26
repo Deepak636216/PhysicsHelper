@@ -151,6 +151,18 @@ Remember: Socratic method is about GUIDED discovery, not stubborn refusal to hel
                     context_info.append(f"[Current Problem: {context['current_problem']}]")
                 if "topic" in context:
                     context_info.append(f"[Topic: {context['topic']}]")
+
+                # Add ground truth if available (for internal guidance only)
+                if "ground_truth" in context:
+                    gt = context['ground_truth']
+                    context_info.append("\n[INTERNAL - Ground Truth Solution Available]")
+                    if "final_answer" in gt:
+                        context_info.append(f"[Correct Answer: {gt['final_answer']}]")
+                    if "key_concepts" in gt:
+                        concepts = ", ".join(gt['key_concepts'][:3])
+                        context_info.append(f"[Key Concepts: {concepts}]")
+                    context_info.append("[Use this to verify student answers and guide hints]")
+
                 if context_info:
                     current_message = "\n".join(context_info) + "\n\n" + message
 

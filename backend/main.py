@@ -15,6 +15,7 @@ from dotenv import load_dotenv
 # Import services
 from services.session_service import SessionService
 from services.memory_bank import MemoryBank
+from services.solution_fetcher import create_solution_fetcher
 
 # Import agents
 from agents.physics_calculator import create_physics_calculator
@@ -97,16 +98,24 @@ async def startup_event():
 
     # Initialize agents
     try:
+        # Create solution fetcher (with Google Search)
+        solution_fetcher = create_solution_fetcher(api_key)
+        print("✅ Solution fetcher initialized (with Google Search)")
+
+        # Create specialist agents
         calculator = create_physics_calculator(api_key)
         tutor = create_socratic_tutor(api_key, physics_calculator=calculator)
         validator = create_solution_validator(api_key, physics_calculator=calculator)
+
+        # Create coordinator with solution fetcher
         coordinator_agent = create_coordinator(
             api_key=api_key,
             socratic_tutor=tutor,
             solution_validator=validator,
-            physics_calculator=calculator
+            physics_calculator=calculator,
+            solution_fetcher=solution_fetcher
         )
-        print("✅ Multi-agent system initialized")
+        print("✅ Multi-agent system initialized with ground truth fetching")
     except Exception as e:
         print(f"❌ Error initializing agents: {e}")
 

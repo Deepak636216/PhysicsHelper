@@ -28,6 +28,7 @@ class CoordinatorAgent:
         socratic_tutor=None,
         solution_validator=None,
         physics_calculator=None,
+        solution_fetcher=None,
         model: str = "gemini-2.5-flash-lite"
     ):
         """
@@ -38,6 +39,7 @@ class CoordinatorAgent:
             socratic_tutor: SocraticTutorAgent instance
             solution_validator: SolutionValidatorAgent instance
             physics_calculator: PhysicsCalculatorAgent instance
+            solution_fetcher: SolutionFetcher instance for ground truth
             model: Model to use (default: gemini-2.5-flash-lite)
         """
         self.client = genai.Client(api_key=api_key)
@@ -45,8 +47,10 @@ class CoordinatorAgent:
         self.socratic_tutor = socratic_tutor
         self.solution_validator = solution_validator
         self.physics_calculator = physics_calculator
+        self.solution_fetcher = solution_fetcher
         self.system_instruction = self._create_system_instruction()
         self.conversation_history = []
+        self.ground_truth_cache = {}  # Cache solutions by problem
 
     def _create_system_instruction(self) -> str:
         """Create the system instruction for the coordinator agent."""
@@ -111,6 +115,8 @@ When routing, simply provide a natural transition like:
         """
         Process a student request and route to appropriate agent.
 
+        ENHANCED: Now fetches ground truth solution FIRST before teaching.
+
         Args:
             student_message: Student's message
             context: Optional context (problem, topic, etc.)
@@ -119,7 +125,17 @@ When routing, simply provide a natural transition like:
             Dictionary with agent response and metadata
         """
         try:
-            # Analyze intent and determine routing
+            # STEP 1: Fetch ground truth solution (silently, in background)
+            if self.solution_fetcher:
+                ground_truth = self._fetch_ground_truth(student_message, context)
+                if ground_truth:
+                    # Add ground truth to context (hidden from user)
+                    if context is None:
+                        context = {}
+                    context['ground_truth'] = ground_truth
+                    context['solution_source'] = ground_truth.get('source', 'unknown')
+
+            # STEP 2: Analyze intent and determine routing
             agent_choice, confidence = self._route_request(student_message, context)
 
             # Add to conversation history
@@ -130,7 +146,7 @@ When routing, simply provide a natural transition like:
                 "routed_to": agent_choice
             })
 
-            # Route to appropriate agent
+            # STEP 3: Route to appropriate agent (with ground truth in context)
             if agent_choice == "socratic_tutor":
                 response = self._route_to_socratic_tutor(student_message, context)
             elif agent_choice == "solution_validator":
@@ -151,7 +167,8 @@ When routing, simply provide a natural transition like:
                 "response": response,
                 "agent_used": agent_choice,
                 "confidence": confidence,
-                "success": True
+                "success": True,
+                "ground_truth_fetched": ground_truth is not None if self.solution_fetcher else False
             }
 
         except Exception as e:
@@ -293,16 +310,61 @@ When routing, simply provide a natural transition like:
             "conversation_length": len(self.conversation_history)
         }
 
+    def _fetch_ground_truth(
+        self,
+        problem: str,
+        context: Optional[Dict[str, Any]] = None
+    ) -> Optional[Dict[str, Any]]:
+        """
+        Fetch ground truth solution for a problem.
+
+        This happens BEFORE teaching, silently in the background.
+        The solution is NOT shown to the user, but used to guide teaching.
+
+        Args:
+            problem: Problem statement
+            context: Optional context
+
+        Returns:
+            Ground truth solution dictionary or None
+        """
+        try:
+            # Check cache first
+            cache_key = problem[:100]  # Use first 100 chars as key
+            if cache_key in self.ground_truth_cache:
+                return self.ground_truth_cache[cache_key]
+
+            # Fetch solution using SolutionFetcher
+            import asyncio
+            solution, source = asyncio.run(
+                self.solution_fetcher.fetch_solution(problem, context)
+            )
+
+            if solution:
+                solution['source'] = source
+                # Cache for future use
+                self.ground_truth_cache[cache_key] = solution
+                return solution
+
+            return None
+
+        except Exception as e:
+            # Don't fail if ground truth fetch fails - just proceed without it
+            print(f"Warning: Could not fetch ground truth: {e}")
+            return None
+
     def clear_history(self):
-        """Clear conversation history."""
+        """Clear conversation history and ground truth cache."""
         self.conversation_history = []
+        self.ground_truth_cache = {}
 
 
 def create_coordinator(
     api_key: str,
     socratic_tutor=None,
     solution_validator=None,
-    physics_calculator=None
+    physics_calculator=None,
+    solution_fetcher=None
 ) -> CoordinatorAgent:
     """
     Factory function to create a CoordinatorAgent.
@@ -312,6 +374,7 @@ def create_coordinator(
         socratic_tutor: SocraticTutorAgent instance
         solution_validator: SolutionValidatorAgent instance
         physics_calculator: PhysicsCalculatorAgent instance
+        solution_fetcher: SolutionFetcher instance for ground truth
 
     Returns:
         Initialized CoordinatorAgent
@@ -320,7 +383,8 @@ def create_coordinator(
         api_key=api_key,
         socratic_tutor=socratic_tutor,
         solution_validator=solution_validator,
-        physics_calculator=physics_calculator
+        physics_calculator=physics_calculator,
+        solution_fetcher=solution_fetcher
     )
 
 

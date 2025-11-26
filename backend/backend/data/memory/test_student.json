@@ -1,0 +1,10 @@
+{
+  "student_id": "test_student",
+  "created_at": "2025-11-26T06:08:52.860581",
+  "topic_mastery": {},
+  "session_history": [],
+  "preferences": {
+    "difficulty_level": "medium",
+    "learning_pace": "moderate"
+  }
+}

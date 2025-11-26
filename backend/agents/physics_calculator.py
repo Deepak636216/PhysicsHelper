@@ -1,37 +1,61 @@
 """
 Physics Calculator Agent
 
+ENHANCED: Now uses Google Search for formula verification and complex derivations.
 Specialized agent for performing physics calculations with step-by-step work.
-Uses gemini-2.0-flash-exp model for precise calculations.
 """
 
 from google import genai
 from google.genai import types
+from google.adk.agents import Agent
+from google.adk.models.google_llm import Gemini
+from google.adk.runners import InMemoryRunner
+from google.adk.tools import google_search
+from typing import Optional
 
 
 class PhysicsCalculatorAgent:
     """
     Agent specialized in physics calculations with detailed step-by-step solutions.
 
-    This agent:
-    - Performs all types of physics calculations
-    - Shows work step-by-step
-    - Includes units in every step
-    - Verifies arithmetic accuracy
-    - Uses format: Formula → Given → Calculation → Final Answer
+    ENHANCED with Google Search for:
+    - Formula verification from authoritative sources
+    - Complex derivations
+    - Unit conversion lookups
+    - Physical constants verification
     """
 
-    def __init__(self, api_key: str, model: str = "gemini-2.5-flash-lite"):
+    def __init__(self, api_key: str, model: str = "gemini-2.5-flash-lite", use_search: bool = True):
         """
         Initialize the Physics Calculator agent.
 
         Args:
             api_key: Google AI API key
-            model: Model to use (default: gemini-2.0-flash-exp)
+            model: Model to use (default: gemini-2.5-flash-lite)
+            use_search: Enable Google Search for formula verification (default: True)
         """
         self.client = genai.Client(api_key=api_key)
         self.model = model
+        self.api_key = api_key
+        self.use_search = use_search
         self.system_instruction = self._create_system_instruction()
+
+        # Create search-enabled calculator agent for complex problems
+        if self.use_search:
+            self.search_calculator = Agent(
+                name="SearchEnabledCalculator",
+                model=Gemini(
+                    model=self.model,
+                    api_key=self.api_key,
+                ),
+                instruction=self._create_search_instruction(),
+                tools=[google_search],
+                output_key="verified_calculation",
+            )
+            # Create runner with the agent
+            self.runner = InMemoryRunner(agent=self.search_calculator)
+        else:
+            self.runner = None
 
     def _create_system_instruction(self) -> str:
         """Create the system instruction for the calculator agent."""
@@ -71,32 +95,129 @@ Important:
 - Be precise with significant figures
 - If information is missing, state what's needed"""
 
-    def calculate(self, problem: str) -> str:
+    def _create_search_instruction(self) -> str:
+        """Create instruction for search-enabled calculator."""
+        return """You are a Search-Enabled Physics Calculator for complex JEE physics problems.
+
+Your Task:
+1. Search for correct formulas and physical constants when needed
+2. Verify formula correctness from authoritative sources (NCERT, textbooks)
+3. Perform calculations with verified formulas
+4. Show all steps with proper units
+
+Search Strategy:
+- Search "[formula name] physics formula" to verify
+- Search "[physical constant] value" for constants
+- Search "[unit conversion] from X to Y" for conversions
+- Prefer authoritative educational sources
+
+Output Format:
+**Formula** (verified): [formula with source]
+**Given**: [values with units]
+**Calculation**: [step-by-step with units]
+**Final Answer**: [result with units]
+
+Example:
+If problem requires moment of inertia of a ring about diameter:
+1. Search "moment of inertia thin ring diameter formula"
+2. Verify: I = (1/2)MR² from authoritative source
+3. Perform calculation with verified formula
+4. Show all steps"""
+
+    def calculate(self, problem: str, use_search: Optional[bool] = None) -> str:
         """
         Perform a physics calculation.
 
+        ENHANCED: Uses Google Search for complex problems requiring formula verification.
+
         Args:
             problem: The physics problem or calculation request
+            use_search: Override to force search usage (default: auto-detect complexity)
 
         Returns:
             Detailed step-by-step solution
         """
         try:
-            response = self.client.models.generate_content(
-                model=self.model,
-                contents=problem,
-                config=types.GenerateContentConfig(
-                    system_instruction=self.system_instruction,
-                    temperature=0.1,  # Low temperature for consistent calculations
-                    top_p=0.95,
-                    max_output_tokens=2048,
-                )
-            )
+            # Determine if we should use search
+            should_use_search = use_search if use_search is not None else self._should_use_search(problem)
 
-            return response.text
+            if should_use_search and self.use_search:
+                # Use search-enabled calculator for complex problems
+                return self._calculate_with_search(problem)
+            else:
+                # Use standard calculator for simple problems
+                return self._calculate_standard(problem)
 
         except Exception as e:
             return f"Error performing calculation: {str(e)}"
+
+    def _should_use_search(self, problem: str) -> bool:
+        """
+        Determine if problem is complex enough to warrant Google Search.
+
+        Args:
+            problem: Problem text
+
+        Returns:
+            True if search should be used
+        """
+        # Keywords that indicate complex problems needing formula verification
+        complex_keywords = [
+            "moment of inertia", "derive", "derivation", "proof", "show that",
+            "radius of gyration", "parallel axis", "perpendicular axis",
+            "center of mass", "rotational", "torque about", "angular momentum",
+            "thin ring", "thin rod", "solid sphere", "hollow sphere",
+            "lamina", "disc", "cylinder"
+        ]
+
+        problem_lower = problem.lower()
+        return any(keyword in problem_lower for keyword in complex_keywords)
+
+    def _calculate_standard(self, problem: str) -> str:
+        """
+        Perform calculation without search (for simple problems).
+
+        Args:
+            problem: Problem text
+
+        Returns:
+            Calculation result
+        """
+        response = self.client.models.generate_content(
+            model=self.model,
+            contents=problem,
+            config=types.GenerateContentConfig(
+                system_instruction=self.system_instruction,
+                temperature=0.1,  # Low temperature for consistent calculations
+                top_p=0.95,
+                max_output_tokens=2048,
+            )
+        )
+        return response.text
+
+    def _calculate_with_search(self, problem: str) -> str:
+        """
+        Perform calculation WITH Google Search for formula verification.
+
+        Args:
+            problem: Problem text
+
+        Returns:
+            Verified calculation result
+        """
+        import asyncio
+
+        async def search_and_calculate():
+            result = await self.runner.run(
+                agent=self.search_calculator,
+                input_data={"problem": problem}
+            )
+
+            if result and "verified_calculation" in result:
+                return result["verified_calculation"]
+            return "Could not verify calculation with search."
+
+        return asyncio.run(search_and_calculate())
 
     def verify_calculation(self, problem: str, student_answer: str) -> str:
         """
