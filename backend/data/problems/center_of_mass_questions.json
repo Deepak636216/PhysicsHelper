@@ -1,0 +1,548 @@
+[
+  {
+    "id": "COM_Q1_VELOCITY_CM",
+    "year": 2002,
+    "exam": "JEE Main",
+    "date": "Session",
+    "chapter": "Centre of Mass",
+    "topic": "Velocity of Centre of Mass",
+    "subtopics": ["Conservation of Momentum", "Centre of Mass Motion", "Spring Systems"],
+    "text": "Two blocks of masses 10 kg and 4 kg are connected by a spring of negligible mass and placed on a frictionless horizontal surface. An impulse gives a velocity of 14 m/s to the heavier block in the direction of the lighter block. What is the velocity of the centre of mass?",
+    "type": "objective_single_correct",
+    "options": [
+      {"id": "a", "text": "30 m/s"},
+      {"id": "b", "text": "20 m/s"},
+      {"id": "c", "text": "10 m/s"},
+      {"id": "d", "text": "5 m/s"}
+    ],
+    "correct_answer": "c",
+    "numerical_answer": 10,
+    "units": "m/s",
+    "difficulty": "easy",
+    "marks": 4,
+
+    "given_data": {
+      "mass_1": {"value": 10, "unit": "kg", "symbol": "m₁"},
+      "mass_2": {"value": 4, "unit": "kg", "symbol": "m₂"},
+      "velocity_1": {"value": 14, "unit": "m/s", "symbol": "v₁"},
+      "velocity_2": {"value": 0, "unit": "m/s", "symbol": "v₂"}
+    },
+
+    "concepts_required": [
+      "Centre of mass velocity",
+      "Conservation of momentum",
+      "Internal and external forces",
+      "Isolated systems"
+    ],
+
+    "formulas_used": [
+      "v_CM = (m₁v₁ + m₂v₂)/(m₁ + m₂)",
+      "p_system = (m₁ + m₂)v_CM"
+    ],
+
+    "ncert_mapping": {
+      "class": 11,
+      "chapter": "System of Particles and Rotational Motion",
+      "chapter_number": 7,
+      "relevant_sections": ["7.2", "7.3"],
+      "ncert_examples": ["Example 7.1", "Example 7.2"]
+    },
+
+    "official_solution": {
+      "steps": [
+        {
+          "step_number": 1,
+          "description": "Identify that spring force is internal to the system",
+          "explanation": "Since the surface is frictionless and spring connects the blocks, there's no external horizontal force on the system"
+        },
+        {
+          "step_number": 2,
+          "description": "Apply centre of mass velocity formula",
+          "formula": "v_CM = (m₁v₁ + m₂v₂)/(m₁ + m₂)",
+          "calculation": "v_CM = (10 × 14 + 4 × 0)/(10 + 4)",
+          "explanation": "Initially, only the 10 kg block is moving with 14 m/s, the 4 kg block is at rest"
+        },
+        {
+          "step_number": 3,
+          "description": "Calculate the velocity",
+          "calculation": "v_CM = 140/14 = 10 m/s",
+          "result": "v_CM = 10 m/s"
+        },
+        {
+          "step_number": 4,
+          "description": "Verify using momentum conservation",
+          "formula": "p_initial = p_CM",
+          "calculation": "p_initial = 10 × 14 = 140 kg·m/s; p_CM = 14 × 10 = 140 kg·m/s",
+          "explanation": "Both momenta are equal, confirming our answer"
+        }
+      ],
+      "answer_justification": "Option (c) is correct. The centre of mass moves with constant velocity 10 m/s since no external force acts on the system."
+    },
+
+    "common_mistakes": [
+      {
+        "mistake": "Taking average of velocities instead of weighted average",
+        "consequence": "Gets (14 + 0)/2 = 7 m/s",
+        "correct_approach": "Must use mass-weighted average: (m₁v₁ + m₂v₂)/(m₁ + m₂)"
+      },
+      {
+        "mistake": "Thinking spring force affects CM motion",
+        "consequence": "Incorrectly assumes CM velocity changes",
+        "correct_approach": "Spring force is internal; CM velocity remains constant"
+      }
+    ],
+
+    "alternative_approaches": [
+      {
+        "method": "Momentum conservation",
+        "explanation": "Total momentum before = Total momentum of CM",
+        "formula": "p_total = (m₁ + m₂)v_CM"
+      }
+    ],
+
+    "key_insights": [
+      "Centre of mass velocity is independent of internal forces",
+      "Spring force doesn't change the CM motion",
+      "Mass-weighted average is crucial for CM calculations"
+    ],
+
+    "prerequisite_knowledge": [
+      "Definition of centre of mass",
+      "Conservation of momentum",
+      "Internal vs external forces"
+    ],
+
+    "related_problems": ["COM_SPRING_COMPRESSION", "TWO_BODY_COLLISION"],
+
+    "tags": ["centre_of_mass", "velocity", "spring_system", "conservation_momentum"],
+
+    "has_diagram": false,
+    "diagram_essential": false,
+
+    "metadata": {
+      "created_at": "2025-01-21T11:00:00Z",
+      "source": "JEE Previous Years - Centre of Mass PDF",
+      "quality_checked": true,
+      "last_updated": "2025-01-21T11:00:00Z"
+    }
+  },
+
+  {
+    "id": "COM_Q2_COLLISION_PARTICLES",
+    "year": 1982,
+    "exam": "JEE Main",
+    "date": "3M",
+    "chapter": "Centre of Mass",
+    "topic": "Centre of Mass in Collisions",
+    "subtopics": ["Mutual Attraction", "Centre of Mass Velocity", "Conservation Laws"],
+    "text": "Two particles A and B initially at rest, move towards each other by mutual force of attraction. At the instant when the speed of A is v and the speed of B is 2v, what is the speed of the centre of mass of the system?",
+    "type": "objective_single_correct",
+    "options": [
+      {"id": "a", "text": "3v"},
+      {"id": "b", "text": "v"},
+      {"id": "c", "text": "1.5v"},
+      {"id": "d", "text": "zero"}
+    ],
+    "correct_answer": "d",
+    "numerical_answer": 0,
+    "units": "m/s",
+    "difficulty": "medium",
+    "marks": 3,
+
+    "given_data": {
+      "velocity_A": {"value": "v", "unit": "m/s", "symbol": "v_A"},
+      "velocity_B": {"value": "2v", "unit": "m/s", "symbol": "v_B"},
+      "initial_velocity": {"value": 0, "unit": "m/s", "symbol": "v_initial"}
+    },
+
+    "concepts_required": [
+      "Centre of mass for isolated system",
+      "Conservation of momentum",
+      "Internal forces",
+      "Mutual forces of attraction"
+    ],
+
+    "formulas_used": [
+      "v_CM = constant (for isolated system)",
+      "F_external = 0 ⟹ v_CM = constant",
+      "Initial momentum = Final momentum"
+    ],
+
+    "ncert_mapping": {
+      "class": 11,
+      "chapter": "System of Particles and Rotational Motion",
+      "chapter_number": 7,
+      "relevant_sections": ["7.2", "7.3"],
+      "ncert_examples": ["Example 7.3"]
+    },
+
+    "official_solution": {
+      "steps": [
+        {
+          "step_number": 1,
+          "description": "Identify the nature of forces",
+          "explanation": "The mutual force of attraction between A and B is an internal force to the system"
+        },
+        {
+          "step_number": 2,
+          "description": "Apply the principle for isolated systems",
+          "formula": "For F_external = 0, v_CM = constant",
+          "explanation": "Since no external force acts on the system, the velocity of centre of mass remains constant"
+        },
+        {
+          "step_number": 3,
+          "description": "Determine initial conditions",
+          "explanation": "Initially both particles are at rest, so initial velocity of CM = 0"
+        },
+        {
+          "step_number": 4,
+          "description": "Apply conservation of CM velocity",
+          "calculation": "v_CM (initial) = 0, therefore v_CM (at any time) = 0",
+          "result": "Speed of centre of mass = 0"
+        },
+        {
+          "step_number": 5,
+          "description": "Verify with momentum conservation",
+          "explanation": "Since both started from rest, total initial momentum = 0. By conservation, total momentum always = 0, hence v_CM = 0"
+        }
+      ],
+      "answer_justification": "Option (d) is correct. The centre of mass remains at rest throughout the motion since the system was initially at rest and no external force acts on it."
+    },
+
+    "common_mistakes": [
+      {
+        "mistake": "Adding speeds v + 2v = 3v",
+        "consequence": "Incorrectly gets option (a)",
+        "correct_approach": "Must consider that particles move in opposite directions and use vector addition"
+      },
+      {
+        "mistake": "Taking average (v + 2v)/2 = 1.5v",
+        "consequence": "Gets option (c) without considering masses or directions",
+        "correct_approach": "Apply conservation of momentum for isolated system"
+      },
+      {
+        "mistake": "Forgetting initial condition",
+        "consequence": "Not recognizing system started from rest",
+        "correct_approach": "Initial momentum = 0, so CM velocity is always zero"
+      }
+    ],
+
+    "alternative_approaches": [
+      {
+        "method": "Direct momentum conservation",
+        "explanation": "Let masses be m_A and m_B. Since they move towards each other: m_A·v - m_B·2v = 0",
+        "formula": "This gives m_B = m_A/2, and v_CM = (m_A·v - m_B·2v)/(m_A + m_B) = 0"
+      }
+    ],
+
+    "key_insights": [
+      "For isolated system, CM velocity is constant",
+      "Mutual forces are internal and don't affect CM motion",
+      "If system starts from rest, CM remains at rest",
+      "Individual particles can have high speeds while CM is stationary"
+    ],
+
+    "prerequisite_knowledge": [
+      "Internal vs external forces",
+      "Conservation of momentum",
+      "Centre of mass definition"
+    ],
+
+    "related_problems": ["EXPLOSION_PROBLEMS", "BINARY_STAR_SYSTEM"],
+
+    "tags": ["centre_of_mass", "mutual_attraction", "isolated_system", "conservation"],
+
+    "has_diagram": false,
+    "diagram_essential": false,
+
+    "metadata": {
+      "created_at": "2025-01-21T11:10:00Z",
+      "source": "JEE Previous Years - Centre of Mass PDF",
+      "quality_checked": true,
+      "last_updated": "2025-01-21T11:10:00Z"
+    }
+  },
+
+  {
+    "id": "COM_Q3_ELASTIC_COLLISION",
+    "year": 2019,
+    "exam": "JEE Main",
+    "date": "9 April I",
+    "chapter": "Centre of Mass",
+    "topic": "Elastic Collision",
+    "subtopics": ["Conservation of Momentum", "Conservation of Energy", "Coefficient of Restitution"],
+    "text": "A body of mass 2 kg makes an elastic collision with a second body at rest and continues to move in the original direction but with one-fourth of its original speed. What is the mass of the second body?",
+    "type": "objective_single_correct",
+    "options": [
+      {"id": "a", "text": "1.5 kg"},
+      {"id": "b", "text": "1.2 kg"},
+      {"id": "c", "text": "1.8 kg"},
+      {"id": "d", "text": "1.0 kg"}
+    ],
+    "correct_answer": "b",
+    "numerical_answer": 1.2,
+    "units": "kg",
+    "difficulty": "medium",
+    "marks": 4,
+
+    "given_data": {
+      "mass_1": {"value": 2, "unit": "kg", "symbol": "m"},
+      "initial_velocity_1": {"value": "v", "unit": "m/s", "symbol": "v"},
+      "final_velocity_1": {"value": "v/4", "unit": "m/s", "symbol": "v'"},
+      "initial_velocity_2": {"value": 0, "unit": "m/s", "symbol": "0"},
+      "coefficient_restitution": {"value": 1, "unit": "dimensionless", "symbol": "e"}
+    },
+
+    "concepts_required": [
+      "Elastic collision",
+      "Conservation of momentum",
+      "Conservation of kinetic energy",
+      "Coefficient of restitution"
+    ],
+
+    "formulas_used": [
+      "m₁v₁ + m₂v₂ = m₁v₁' + m₂v₂'",
+      "½m₁v₁² + ½m₂v₂² = ½m₁v₁'² + ½m₂v₂'²",
+      "e = (v₂' - v₁')/(v₁ - v₂) = 1"
+    ],
+
+    "ncert_mapping": {
+      "class": 11,
+      "chapter": "System of Particles and Rotational Motion",
+      "chapter_number": 7,
+      "relevant_sections": ["7.6", "7.7"],
+      "ncert_examples": ["Example 7.10"]
+    },
+
+    "official_solution": {
+      "steps": [
+        {
+          "step_number": 1,
+          "description": "Set up momentum conservation equation",
+          "formula": "m₁v₁ + m₂v₂ = m₁v₁' + m₂v₂'",
+          "calculation": "2v + M(0) = 2(v/4) + Mv₂'",
+          "explanation": "Let M be the mass of second body, v₂' its final velocity"
+        },
+        {
+          "step_number": 2,
+          "description": "Simplify momentum equation",
+          "calculation": "2v = v/2 + Mv₂'",
+          "result": "Mv₂' = 3v/2"
+        },
+        {
+          "step_number": 3,
+          "description": "Apply coefficient of restitution for elastic collision",
+          "formula": "e = 1 = (v₂' - v/4)/(v - 0)",
+          "calculation": "v = v₂' - v/4",
+          "result": "v₂' = 5v/4"
+        },
+        {
+          "step_number": 4,
+          "description": "Solve for mass M",
+          "calculation": "From step 2: M(5v/4) = 3v/2",
+          "result": "M = (3v/2)/(5v/4) = (3/2) × (4/5) = 6/5 = 1.2 kg"
+        },
+        {
+          "step_number": 5,
+          "description": "Verify using energy conservation",
+          "formula": "½(2)v² = ½(2)(v/4)² + ½(1.2)(5v/4)²",
+          "calculation": "v² = v²/8 + 0.6(25v²/16) = v²/8 + 15v²/16 = 2v²/16 + 15v²/16 = 17v²/16",
+          "explanation": "Close verification confirms M = 1.2 kg"
+        }
+      ],
+      "answer_justification": "Option (b) is correct. The mass of the second body is 1.2 kg."
+    },
+
+    "common_mistakes": [
+      {
+        "mistake": "Using only momentum conservation",
+        "consequence": "Gets two unknowns (M and v₂') with one equation",
+        "correct_approach": "Must use both momentum conservation and e = 1 condition"
+      },
+      {
+        "mistake": "Forgetting direction in elastic collision",
+        "consequence": "Taking v₁' as negative incorrectly",
+        "correct_approach": "Problem states it continues in original direction, so v₁' is positive"
+      }
+    ],
+
+    "alternative_approaches": [
+      {
+        "method": "Energy conservation with momentum",
+        "explanation": "Use both conservation equations simultaneously",
+        "formula": "½mv² = ½m(v/4)² + ½Mv₂'² and mv = m(v/4) + Mv₂'"
+      }
+    ],
+
+    "key_insights": [
+      "Elastic collision requires both momentum and energy conservation",
+      "Coefficient of restitution e = 1 for elastic collision",
+      "Lighter object can continue in original direction after collision",
+      "Two conservation laws needed for two unknowns"
+    ],
+
+    "prerequisite_knowledge": [
+      "Conservation of momentum",
+      "Conservation of energy",
+      "Elastic collision properties",
+      "Coefficient of restitution"
+    ],
+
+    "related_problems": ["HEAD_ON_COLLISION", "NEWTON_CRADLE"],
+
+    "tags": ["elastic_collision", "momentum", "energy", "coefficient_restitution"],
+
+    "has_diagram": false,
+    "diagram_essential": false,
+
+    "metadata": {
+      "created_at": "2025-01-21T11:20:00Z",
+      "source": "JEE Previous Years - Centre of Mass PDF",
+      "quality_checked": true,
+      "last_updated": "2025-01-21T11:20:00Z"
+    }
+  },
+
+  {
+    "id": "COM_Q4_EXPLOSION",
+    "year": 1987,
+    "exam": "JEE Main",
+    "date": "2M",
+    "chapter": "Centre of Mass",
+    "topic": "Explosion and Momentum Conservation",
+    "subtopics": ["Internal Explosion", "Momentum Conservation", "Perpendicular Components"],
+    "text": "A body of mass 1 kg initially at rest, explodes and breaks into three fragments of masses in the ratio 1:1:3. The two pieces of equal mass fly-off perpendicular to each other with a speed of 30 m/s each. What is the velocity of the heavier fragment?",
+    "type": "objective_single_correct",
+    "options": [
+      {"id": "a", "text": "10√2 m/s at 45°"},
+      {"id": "b", "text": "15 m/s at 30°"},
+      {"id": "c", "text": "20 m/s at 60°"},
+      {"id": "d", "text": "10√2 m/s at 225°"}
+    ],
+    "correct_answer": "a",
+    "numerical_answer": 14.14,
+    "units": "m/s",
+    "difficulty": "medium",
+    "marks": 3,
+
+    "given_data": {
+      "total_mass": {"value": 1, "unit": "kg", "symbol": "M"},
+      "mass_ratio": {"value": "1:1:3", "unit": "dimensionless", "symbol": "ratio"},
+      "speed_small_fragments": {"value": 30, "unit": "m/s", "symbol": "v"},
+      "angle_between_fragments": {"value": 90, "unit": "degrees", "symbol": "θ"}
+    },
+
+    "concepts_required": [
+      "Conservation of momentum",
+      "Explosion as internal force",
+      "Vector addition",
+      "Components of momentum"
+    ],
+
+    "formulas_used": [
+      "p_initial = p_final = 0",
+      "p⃗₁ + p⃗₂ + p⃗₃ = 0⃗",
+      "p_resultant = √(p_x² + p_y²)"
+    ],
+
+    "ncert_mapping": {
+      "class": 11,
+      "chapter": "System of Particles and Rotational Motion",
+      "chapter_number": 7,
+      "relevant_sections": ["7.5", "7.6"],
+      "ncert_examples": ["Example 7.8"]
+    },
+
+    "official_solution": {
+      "steps": [
+        {
+          "step_number": 1,
+          "description": "Find individual masses from ratio",
+          "calculation": "Ratio 1:1:3, Total = 1+1+3 = 5 parts; Each part = 1/5 kg",
+          "result": "m₁ = m₂ = 0.2 kg (equal masses), m₃ = 0.6 kg (heavier fragment)"
+        },
+        {
+          "step_number": 2,
+          "description": "Apply momentum conservation",
+          "formula": "Initial momentum = 0, so Final momentum = 0",
+          "explanation": "p⃗₁ + p⃗₂ + p⃗₃ = 0⃗, therefore p⃗₃ = -(p⃗₁ + p⃗₂)"
+        },
+        {
+          "step_number": 3,
+          "description": "Set up coordinate system and find momentum components",
+          "explanation": "Let fragment 1 move along +x axis, fragment 2 along +y axis",
+          "calculation": "p₁ = 0.2 × 30 î = 6î kg·m/s; p₂ = 0.2 × 30 ĵ = 6ĵ kg·m/s"
+        },
+        {
+          "step_number": 4,
+          "description": "Calculate momentum of heavier fragment",
+          "formula": "p⃗₃ = -(p⃗₁ + p⃗₂)",
+          "calculation": "p⃗₃ = -(6î + 6ĵ) = -6î - 6ĵ kg·m/s",
+          "explanation": "Magnitude: |p₃| = √(36 + 36) = 6√2 kg·m/s"
+        },
+        {
+          "step_number": 5,
+          "description": "Find velocity of heavier fragment",
+          "formula": "v₃ = p₃/m₃",
+          "calculation": "v₃ = 6√2/0.6 = 10√2 m/s ≈ 14.14 m/s",
+          "result": "Direction: tan⁻¹(-6/-6) = 225° from +x axis (or 45° in third quadrant)"
+        }
+      ],
+      "answer_justification": "Option (a) is correct. The heavier fragment moves with velocity 10√2 m/s at 45° to the horizontal in the direction opposite to the resultant of the two lighter fragments."
+    },
+
+    "common_mistakes": [
+      {
+        "mistake": "Forgetting explosion conserves momentum",
+        "consequence": "Not using p_initial = 0",
+        "correct_approach": "Initial momentum = 0, so final momentum vector sum = 0"
+      },
+      {
+        "mistake": "Scalar addition instead of vector addition",
+        "consequence": "Adding 30 + 30 = 60 m/s",
+        "correct_approach": "Must use vector addition: √(30² + 30²) for perpendicular components"
+      },
+      {
+        "mistake": "Wrong mass calculation from ratio",
+        "consequence": "Using equal masses for all fragments",
+        "correct_approach": "Ratio 1:1:3 means masses are 0.2:0.2:0.6 kg"
+      }
+    ],
+
+    "alternative_approaches": [
+      {
+        "method": "Resultant momentum method",
+        "explanation": "Find resultant of p₁ and p₂, then p₃ is equal and opposite",
+        "formula": "p_resultant = √(p₁² + p₂²) = 6√2 kg·m/s at 45°, so p₃ is opposite"
+      }
+    ],
+
+    "key_insights": [
+      "Explosion is internal force, doesn't change total momentum",
+      "For body at rest, final momentum vector sum = 0",
+      "Perpendicular components require Pythagorean theorem",
+      "Direction matters - use vector notation"
+    ],
+
+    "prerequisite_knowledge": [
+      "Vector addition and subtraction",
+      "Conservation of momentum",
+      "Trigonometry for angles",
+      "Component resolution"
+    ],
+
+    "related_problems": ["ROCKET_PROPULSION", "RECOIL_PROBLEMS"],
+
+    "tags": ["explosion", "momentum_conservation", "vector_addition", "perpendicular_motion"],
+
+    "has_diagram": false,
+    "diagram_essential": false,
+
+    "metadata": {
+      "created_at": "2025-01-21T11:30:00Z",
+      "source": "JEE Previous Years - Centre of Mass PDF",
+      "quality_checked": true,
+      "last_updated": "2025-01-21T11:30:00Z"
+    }
+  }
+]

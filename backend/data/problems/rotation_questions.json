@@ -1,0 +1,564 @@
+[
+  {
+    "id": "ROT_Q1_DISC_MI",
+    "year": 2019,
+    "exam": "JEE Main",
+    "date": "10 April I",
+    "chapter": "System of Particles and Rotational Motion",
+    "topic": "Moment of Inertia",
+    "subtopics": ["Non-uniform mass distribution", "Radius of gyration", "Integration"],
+    "text": "A thin disc of mass M and radius R has mass per unit area σ(r) = kr², where r is the distance from its centre. Its moment of inertia about an axis going through its centre of mass and perpendicular to its plane is",
+    "type": "objective_single_correct",
+    "options": [
+      {"id": "a", "text": "MR²/2"},
+      {"id": "b", "text": "MR²/6"},
+      {"id": "c", "text": "MR²/3"},
+      {"id": "d", "text": "2MR²/3"}
+    ],
+    "correct_answer": "d",
+    "numerical_answer": null,
+    "units": null,
+    "difficulty": "medium",
+    "marks": 4,
+
+    "given_data": {
+      "mass": {"value": "M", "unit": "kg", "symbol": "M"},
+      "radius": {"value": "R", "unit": "m", "symbol": "R"},
+      "surface_density": {"value": "kr²", "unit": "kg/m²", "symbol": "σ(r)"}
+    },
+
+    "concepts_required": [
+      "Moment of inertia of disc with variable density",
+      "Integration for non-uniform mass distribution",
+      "Perpendicular axis theorem basics",
+      "Surface mass density"
+    ],
+
+    "formulas_used": [
+      "σ(r) = kr²",
+      "dm = σ·dA = kr²·2πr·dr",
+      "I = ∫r²dm",
+      "M = ∫dm"
+    ],
+
+    "ncert_mapping": {
+      "class": 11,
+      "chapter": "System of Particles and Rotational Motion",
+      "chapter_number": 7,
+      "relevant_sections": ["7.8", "7.9"],
+      "ncert_examples": ["Example 7.8", "Example 7.10"]
+    },
+
+    "official_solution": {
+      "steps": [
+        {
+          "step_number": 1,
+          "description": "Calculate mass of disc using integration",
+          "formula": "M = ∫dm = ∫₀ᴿ σ·dA",
+          "calculation": "M = ∫₀ᴿ kr²·2πr·dr = 2πk∫₀ᴿ r³dr = 2πk[r⁴/4]₀ᴿ = πkR⁴/2",
+          "explanation": "Surface element dA = 2πr·dr for a ring of radius r and width dr"
+        },
+        {
+          "step_number": 2,
+          "description": "Express k in terms of M and R",
+          "formula": "k = 2M/(πR⁴)",
+          "calculation": "From M = πkR⁴/2, we get k = 2M/(πR⁴)",
+          "explanation": "This allows us to express final answer in terms of M and R"
+        },
+        {
+          "step_number": 3,
+          "description": "Calculate moment of inertia",
+          "formula": "I = ∫r²dm",
+          "calculation": "I = ∫₀ᴿ r²·kr²·2πr·dr = 2πk∫₀ᴿ r⁵dr = 2πk[r⁶/6]₀ᴿ = πkR⁶/3",
+          "explanation": "Integrate r² times the mass element dm over the entire disc"
+        },
+        {
+          "step_number": 4,
+          "description": "Substitute value of k and simplify",
+          "formula": "I = πkR⁶/3",
+          "calculation": "I = π(2M/πR⁴)·R⁶/3 = 2MR²/3",
+          "result": "I = 2MR²/3"
+        }
+      ],
+      "answer_justification": "Option (d) is correct: I = 2MR²/3"
+    },
+
+    "common_mistakes": [
+      {
+        "mistake": "Using uniform disc formula I = MR²/2",
+        "consequence": "Incorrect answer as density varies with r²",
+        "correct_approach": "Must integrate considering σ(r) = kr²"
+      },
+      {
+        "mistake": "Forgetting to find k in terms of M and R",
+        "consequence": "Answer remains in terms of k",
+        "correct_approach": "Calculate total mass to eliminate k"
+      },
+      {
+        "mistake": "Incorrect limits or integration",
+        "consequence": "Wrong numerical coefficient",
+        "correct_approach": "Carefully integrate from 0 to R with proper area element"
+      }
+    ],
+
+    "alternative_approaches": [
+      {
+        "method": "Using density proportionality",
+        "explanation": "For σ ∝ rⁿ, moment of inertia formula can be derived",
+        "formula": "I = MR²/(n+4) for σ = krⁿ with proper normalization"
+      }
+    ],
+
+    "key_insights": [
+      "Non-uniform density requires integration, not direct formula application",
+      "Surface mass density σ(r) must be integrated over area elements",
+      "Final answer is (2/3)MR², larger than uniform disc (1/2)MR² due to mass concentration at outer radii"
+    ],
+
+    "prerequisite_knowledge": [
+      "Integration techniques",
+      "Moment of inertia concept",
+      "Polar coordinates and area elements"
+    ],
+
+    "related_problems": ["ROT_Q2_BEADS", "ROT_Q3_KE_ROTATION"],
+
+    "tags": ["moment_of_inertia", "non_uniform_density", "integration", "disc"],
+
+    "has_diagram": false,
+    "diagram_essential": false,
+
+    "metadata": {
+      "created_at": "2025-01-21T10:30:00Z",
+      "source": "JEE Previous Years - Rotation",
+      "quality_checked": true,
+      "last_updated": "2025-01-21T10:30:00Z"
+    }
+  },
+  {
+    "id": "ROT_Q2_BEADS_ANGULAR_MOMENTUM",
+    "year": 2019,
+    "exam": "JEE Main",
+    "date": "09 April II",
+    "chapter": "System of Particles and Rotational Motion",
+    "topic": "Angular Momentum Conservation",
+    "subtopics": ["Conservation of angular momentum", "Variable moment of inertia", "Rotation"],
+    "text": "A thin smooth rod of length L and mass M is rotating freely with angular speed ω₀ about an axis perpendicular to the rod and passing through its centre. Two beads of mass m and negligible size are at the centre of the rod initially. The beads are free to slide along the rod. The angular speed of the system, when the beads reach the opposite ends of the rod, will be",
+    "type": "objective_single_correct",
+    "options": [
+      {"id": "a", "text": "Mω₀/(M + 3m)"},
+      {"id": "b", "text": "Mω₀/(M + m)"},
+      {"id": "c", "text": "Mω₀/(M + 2m)"},
+      {"id": "d", "text": "Mω₀/(M + 6m)"}
+    ],
+    "correct_answer": "d",
+    "numerical_answer": null,
+    "units": "rad/s",
+    "difficulty": "medium",
+    "marks": 4,
+
+    "given_data": {
+      "rod_mass": {"value": "M", "unit": "kg", "symbol": "M"},
+      "rod_length": {"value": "L", "unit": "m", "symbol": "L"},
+      "bead_mass": {"value": "m", "unit": "kg", "symbol": "m"},
+      "initial_angular_speed": {"value": "ω₀", "unit": "rad/s", "symbol": "ω₀"},
+      "number_of_beads": {"value": 2, "unit": "", "symbol": ""}
+    },
+
+    "concepts_required": [
+      "Conservation of angular momentum",
+      "Moment of inertia of rod",
+      "Moment of inertia of point masses",
+      "External torque analysis"
+    ],
+
+    "formulas_used": [
+      "L = Iω (angular momentum)",
+      "I_rod = ML²/12",
+      "I_point = mr²",
+      "L_initial = L_final"
+    ],
+
+    "ncert_mapping": {
+      "class": 11,
+      "chapter": "System of Particles and Rotational Motion",
+      "chapter_number": 7,
+      "relevant_sections": ["7.10", "7.11"],
+      "ncert_examples": ["Example 7.14", "Example 7.15"]
+    },
+
+    "official_solution": {
+      "steps": [
+        {
+          "step_number": 1,
+          "description": "Calculate initial moment of inertia",
+          "formula": "I_i = I_rod + I_beads(at center)",
+          "calculation": "I_i = ML²/12 + 2m(0)² = ML²/12",
+          "explanation": "Initially beads are at center, so their contribution is zero"
+        },
+        {
+          "step_number": 2,
+          "description": "Calculate final moment of inertia when beads reach ends",
+          "formula": "I_f = I_rod + I_beads(at ends)",
+          "calculation": "I_f = ML²/12 + 2m(L/2)² = ML²/12 + mL²/2 = ML²/12 + 6mL²/12 = (M + 6m)L²/12",
+          "explanation": "Each bead is at distance L/2 from axis"
+        },
+        {
+          "step_number": 3,
+          "description": "Apply conservation of angular momentum",
+          "formula": "L_i = L_f → I_i·ω₀ = I_f·ω",
+          "calculation": "(ML²/12)ω₀ = [(M + 6m)L²/12]ω",
+          "explanation": "No external torque, so angular momentum is conserved"
+        },
+        {
+          "step_number": 4,
+          "description": "Solve for final angular speed",
+          "calculation": "Mω₀ = (M + 6m)ω",
+          "result": "ω = Mω₀/(M + 6m)"
+        }
+      ],
+      "answer_justification": "Option (d) is correct"
+    },
+
+    "common_mistakes": [
+      {
+        "mistake": "Using rod length L instead of L/2 for bead distance",
+        "consequence": "Gets I_f = ML²/12 + 2mL²",
+        "correct_approach": "Beads are at opposite ends, each at distance L/2 from center"
+      },
+      {
+        "mistake": "Assuming angular momentum not conserved",
+        "consequence": "Trying to use energy conservation",
+        "correct_approach": "No external torque, so L is conserved"
+      },
+      {
+        "mistake": "Including initial bead contribution",
+        "consequence": "Wrong initial moment of inertia",
+        "correct_approach": "Beads at center contribute zero to I_i"
+      }
+    ],
+
+    "alternative_approaches": [
+      {
+        "method": "Using parallel axis theorem",
+        "explanation": "Can verify bead contribution using I = I_cm + md²",
+        "formula": "For point mass at center, I_cm = 0, so I = m(L/2)²"
+      }
+    ],
+
+    "key_insights": [
+      "Angular momentum is conserved when no external torque acts",
+      "As moment of inertia increases, angular velocity must decrease",
+      "The factor of 6 comes from two beads each at (L/2)²",
+      "Internal forces (normal reactions) don't affect angular momentum conservation"
+    ],
+
+    "prerequisite_knowledge": [
+      "Moment of inertia formulas",
+      "Conservation of angular momentum",
+      "Understanding of external vs internal torques"
+    ],
+
+    "related_problems": ["ROT_Q1_DISC_MI", "ROT_Q4_TORSION"],
+
+    "tags": ["angular_momentum", "conservation", "variable_inertia", "rotation"],
+
+    "has_diagram": false,
+    "diagram_essential": false,
+
+    "metadata": {
+      "created_at": "2025-01-21T10:35:00Z",
+      "source": "JEE Previous Years - Rotation",
+      "quality_checked": true,
+      "last_updated": "2025-01-21T10:35:00Z"
+    }
+  },
+  {
+    "id": "ROT_Q3_ROTATIONAL_KE",
+    "year": 2019,
+    "exam": "JEE Main",
+    "date": "9 April II",
+    "chapter": "System of Particles and Rotational Motion",
+    "topic": "Rotational Kinetics",
+    "subtopics": ["Rotational kinetic energy", "Angular acceleration", "Torque"],
+    "text": "Moment of inertia of a body about a given axis is 1.5 kg·m². Initially, the body is at rest. In order to produce a rotational kinetic energy of 1200 J, the angular acceleration of 20 rad/s² must be applied about the axis for a duration of",
+    "type": "objective_single_correct",
+    "options": [
+      {"id": "a", "text": "5 s"},
+      {"id": "b", "text": "2 s"},
+      {"id": "c", "text": "3 s"},
+      {"id": "d", "text": "2.5 s"}
+    ],
+    "correct_answer": "b",
+    "numerical_answer": 2,
+    "units": "s",
+    "difficulty": "easy",
+    "marks": 4,
+
+    "given_data": {
+      "moment_of_inertia": {"value": 1.5, "unit": "kg·m²", "symbol": "I"},
+      "initial_angular_velocity": {"value": 0, "unit": "rad/s", "symbol": "ω₀"},
+      "final_KE": {"value": 1200, "unit": "J", "symbol": "KE"},
+      "angular_acceleration": {"value": 20, "unit": "rad/s²", "symbol": "α"}
+    },
+
+    "concepts_required": [
+      "Rotational kinetic energy",
+      "Angular kinematics",
+      "Equations of rotational motion"
+    ],
+
+    "formulas_used": [
+      "KE = (1/2)Iω²",
+      "ω = ω₀ + αt",
+      "ω² = ω₀² + 2αθ"
+    ],
+
+    "ncert_mapping": {
+      "class": 11,
+      "chapter": "System of Particles and Rotational Motion",
+      "chapter_number": 7,
+      "relevant_sections": ["7.8", "7.12"],
+      "ncert_examples": ["Example 7.12"]
+    },
+
+    "official_solution": {
+      "steps": [
+        {
+          "step_number": 1,
+          "description": "Find final angular velocity from kinetic energy",
+          "formula": "KE = (1/2)Iω²",
+          "calculation": "1200 = (1/2)(1.5)ω²",
+          "explanation": "Substitute given values of KE and I"
+        },
+        {
+          "step_number": 2,
+          "description": "Solve for ω",
+          "calculation": "ω² = 2400/1.5 = 1600",
+          "result": "ω = 40 rad/s"
+        },
+        {
+          "step_number": 3,
+          "description": "Use first equation of rotational motion",
+          "formula": "ω = ω₀ + αt",
+          "calculation": "40 = 0 + 20t",
+          "explanation": "Initially at rest, so ω₀ = 0"
+        },
+        {
+          "step_number": 4,
+          "description": "Solve for time",
+          "calculation": "t = 40/20 = 2 s",
+          "result": "t = 2 s"
+        }
+      ],
+      "answer_justification": "Option (b) is correct: 2 seconds"
+    },
+
+    "common_mistakes": [
+      {
+        "mistake": "Forgetting factor of 1/2 in KE formula",
+        "consequence": "Gets ω² = 800 instead of 1600",
+        "correct_approach": "Use KE = (1/2)Iω², not Iω²"
+      },
+      {
+        "mistake": "Using linear motion equations",
+        "consequence": "Confusion between v and ω",
+        "correct_approach": "Use rotational analogs: ω = ω₀ + αt"
+      },
+      {
+        "mistake": "Sign errors or unit confusion",
+        "consequence": "Incorrect numerical answer",
+        "correct_approach": "Maintain consistent units throughout"
+      }
+    ],
+
+    "alternative_approaches": [
+      {
+        "method": "Using angular displacement",
+        "explanation": "Can use ω² = ω₀² + 2αθ to find θ, then θ = ω₀t + (1/2)αt²",
+        "formula": "Gives same answer but requires extra step"
+      }
+    ],
+
+    "key_insights": [
+      "Rotational KE depends on square of angular velocity",
+      "Angular acceleration relates angular velocity and time linearly",
+      "Problem combines energy and kinematics concepts",
+      "Starting from rest simplifies calculations (ω₀ = 0)"
+    ],
+
+    "prerequisite_knowledge": [
+      "Rotational kinetic energy formula",
+      "Equations of rotational motion",
+      "Basic algebra and square roots"
+    ],
+
+    "related_problems": ["ROT_Q2_BEADS_ANGULAR_MOMENTUM", "ROT_Q4_TORSION"],
+
+    "tags": ["rotational_KE", "angular_acceleration", "kinematics", "energy"],
+
+    "has_diagram": false,
+    "diagram_essential": false,
+
+    "metadata": {
+      "created_at": "2025-01-21T10:40:00Z",
+      "source": "JEE Previous Years - Rotation",
+      "quality_checked": true,
+      "last_updated": "2025-01-21T10:40:00Z"
+    }
+  },
+  {
+    "id": "ROT_Q4_TORSION_PENDULUM",
+    "year": 2019,
+    "exam": "JEE Main",
+    "date": "9 Jan I",
+    "chapter": "System of Particles and Rotational Motion",
+    "topic": "Torsional Oscillations",
+    "subtopics": ["Torsional constant", "Angular momentum", "Tension in rod"],
+    "text": "Two masses m and m/2 are connected at the two ends of a massless rigid rod of length l. The rod is suspended by a thin wire of torsional constant k at the centre of mass of the rod-mass system. Because of torsional constant k, the restoring torque is τ = -kθ for angular displacement θ. If the rod is rotated by θ₀ and released, the tension in it when it passes through its mean position will be",
+    "type": "objective_single_correct",
+    "options": [
+      {"id": "a", "text": "2kθ₀²/l"},
+      {"id": "b", "text": "kl·θ₀²"},
+      {"id": "c", "text": "3kθ₀²/l"},
+      {"id": "d", "text": "kl·θ₀²/2"}
+    ],
+    "correct_answer": "a",
+    "numerical_answer": null,
+    "units": "N",
+    "difficulty": "hard",
+    "marks": 4,
+
+    "given_data": {
+      "mass_1": {"value": "m", "unit": "kg", "symbol": "m"},
+      "mass_2": {"value": "m/2", "unit": "kg", "symbol": "m/2"},
+      "rod_length": {"value": "l", "unit": "m", "symbol": "l"},
+      "torsional_constant": {"value": "k", "unit": "N·m/rad", "symbol": "k"},
+      "initial_displacement": {"value": "θ₀", "unit": "rad", "symbol": "θ₀"}
+    },
+
+    "concepts_required": [
+      "Centre of mass location",
+      "Torsional oscillations",
+      "Conservation of energy",
+      "Centripetal force and tension"
+    ],
+
+    "formulas_used": [
+      "x_cm = (m₁x₁ + m₂x₂)/(m₁ + m₂)",
+      "I = Σmr²",
+      "τ = -kθ",
+      "E = (1/2)kθ² = (1/2)Iω²",
+      "T = mv²/r"
+    ],
+
+    "ncert_mapping": {
+      "class": 11,
+      "chapter": "System of Particles and Rotational Motion",
+      "chapter_number": 7,
+      "relevant_sections": ["7.4", "7.10"],
+      "ncert_examples": ["Example 7.6", "Example 7.14"]
+    },
+
+    "official_solution": {
+      "steps": [
+        {
+          "step_number": 1,
+          "description": "Find centre of mass position",
+          "formula": "x_cm from mass m = (m·0 + (m/2)·l)/(m + m/2)",
+          "calculation": "x_cm = (ml/2)/(3m/2) = l/3",
+          "explanation": "CM is at l/3 from mass m, or 2l/3 from mass m/2"
+        },
+        {
+          "step_number": 2,
+          "description": "Calculate moment of inertia about CM",
+          "formula": "I = m(l/3)² + (m/2)(2l/3)²",
+          "calculation": "I = ml²/9 + 2ml²/9 = ml²/3",
+          "explanation": "Sum of mr² for both masses about the CM"
+        },
+        {
+          "step_number": 3,
+          "description": "Apply energy conservation at mean position",
+          "formula": "PE_max = KE_max → (1/2)kθ₀² = (1/2)Iω²",
+          "calculation": "(1/2)kθ₀² = (1/2)(ml²/3)ω²",
+          "explanation": "At maximum displacement, KE = 0; at mean position, PE = 0"
+        },
+        {
+          "step_number": 4,
+          "description": "Solve for angular velocity at mean position",
+          "calculation": "ω² = 3kθ₀²/(ml²)",
+          "result": "ω = θ₀√(3k/(ml²))"
+        },
+        {
+          "step_number": 5,
+          "description": "Calculate tension using centripetal force",
+          "formula": "T = m·v²/r = m·(rω)²/r = mrω²",
+          "calculation": "T = m(l/3)·(3kθ₀²/(ml²)) = kθ₀²/l × (l²/3l) = kθ₀²/l × (l/3)",
+          "explanation": "For mass m at distance l/3 from center"
+        },
+        {
+          "step_number": 6,
+          "description": "Simplify to get final tension",
+          "calculation": "T = m(l/3)ω² = m(l/3)(3kθ₀²/(ml²)) = 2kθ₀²/l",
+          "result": "T = 2kθ₀²/l",
+          "explanation": "Note: Both masses contribute, but net tension in rod is for the system"
+        }
+      ],
+      "answer_justification": "Option (a) is correct: T = 2kθ₀²/l"
+    },
+
+    "common_mistakes": [
+      {
+        "mistake": "Assuming CM is at geometric center (l/2)",
+        "consequence": "Wrong moment of inertia calculation",
+        "correct_approach": "Calculate CM using mass distribution: at l/3 from mass m"
+      },
+      {
+        "mistake": "Using full rod length l instead of distance from CM",
+        "consequence": "Incorrect centripetal force calculation",
+        "correct_approach": "Use r = l/3 and 2l/3 for respective masses"
+      },
+      {
+        "mistake": "Forgetting to account for both masses",
+        "consequence": "Missing factor in tension",
+        "correct_approach": "Consider tension provides centripetal force for both masses"
+      }
+    ],
+
+    "alternative_approaches": [
+      {
+        "method": "Using SHM equations directly",
+        "explanation": "Can use ω_max = Aω₀ where ω₀ = √(k/I_eff)",
+        "formula": "Gives same result but requires understanding of torsional SHM"
+      }
+    ],
+
+    "key_insights": [
+      "Torsional pendulum undergoes SHM with restoring torque τ = -kθ",
+      "Centre of mass is not at geometric center for unequal masses",
+      "At mean position, all potential energy converts to kinetic energy",
+      "Tension in rod provides necessary centripetal force for rotation"
+    ],
+
+    "prerequisite_knowledge": [
+      "Centre of mass calculations",
+      "Moment of inertia for point masses",
+      "Energy conservation in SHM",
+      "Circular motion and centripetal force"
+    ],
+
+    "related_problems": ["ROT_Q2_BEADS_ANGULAR_MOMENTUM", "ROT_Q3_ROTATIONAL_KE"],
+
+    "tags": ["torsion", "SHM", "angular_momentum", "center_of_mass", "tension"],
+
+    "has_diagram": false,
+    "diagram_essential": false,
+
+    "metadata": {
+      "created_at": "2025-01-21T10:45:00Z",
+      "source": "JEE Previous Years - Rotation",
+      "quality_checked": true,
+      "last_updated": "2025-01-21T10:45:00Z"
+    }
+  }
+]

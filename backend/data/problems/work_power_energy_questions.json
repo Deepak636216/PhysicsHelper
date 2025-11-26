@@ -1,0 +1,544 @@
+[
+  {
+    "id": "WPE_Q1_CHAIN_WORK",
+    "year": 1985,
+    "exam": "JEE Main",
+    "date": "2M",
+    "chapter": "Work, Power and Energy",
+    "topic": "Work Done by Gravity",
+    "subtopics": ["Work Against Gravity", "Variable Mass System", "Center of Mass"],
+    "text": "A uniform chain of length L and mass M is lying on a smooth table and one-third of its length is hanging vertically down over the edge of the table. If g is acceleration due to gravity, what is the work required to pull the hanging part on to the table?",
+    "type": "objective_single_correct",
+    "options": [
+      {"id": "a", "text": "MgL"},
+      {"id": "b", "text": "MgL/3"},
+      {"id": "c", "text": "MgL/9"},
+      {"id": "d", "text": "MgL/18"}
+    ],
+    "correct_answer": "d",
+    "numerical_answer": 0.0556,
+    "units": "MgL",
+    "difficulty": "medium",
+    "marks": 2,
+
+    "given_data": {
+      "total_length": {"value": "L", "unit": "m", "symbol": "L"},
+      "total_mass": {"value": "M", "unit": "kg", "symbol": "M"},
+      "hanging_fraction": {"value": "1/3", "unit": "dimensionless", "symbol": "fraction"},
+      "gravity": {"value": "g", "unit": "m/s²", "symbol": "g"}
+    },
+
+    "concepts_required": [
+      "Work done against gravity",
+      "Center of mass concept",
+      "Potential energy change",
+      "Variable mass distribution"
+    ],
+
+    "formulas_used": [
+      "W = mgh",
+      "Mass of portion = (M/3)",
+      "Center of mass at middle = L/6 from edge"
+    ],
+
+    "ncert_mapping": {
+      "class": 11,
+      "chapter": "Work, Energy and Power",
+      "chapter_number": 6,
+      "relevant_sections": ["6.2", "6.4"],
+      "ncert_examples": ["Example 6.2"]
+    },
+
+    "official_solution": {
+      "steps": [
+        {
+          "step_number": 1,
+          "description": "Find mass of hanging portion",
+          "calculation": "Mass of hanging part = M/3",
+          "explanation": "One-third of the chain is hanging, so its mass is one-third of total mass"
+        },
+        {
+          "step_number": 2,
+          "description": "Locate center of mass of hanging portion",
+          "calculation": "Center of mass is at middle of hanging part = (L/3)/2 = L/6 below the edge",
+          "explanation": "For uniform distribution, COM is at the geometric center"
+        },
+        {
+          "step_number": 3,
+          "description": "Calculate work done to lift COM to table level",
+          "formula": "W = mgh",
+          "calculation": "W = (M/3) × g × (L/6)",
+          "result": "W = MgL/18"
+        },
+        {
+          "step_number": 4,
+          "description": "Verify using potential energy method",
+          "explanation": "Work done = Change in gravitational PE = Final PE - Initial PE = 0 - (-MgL/18) = MgL/18"
+        }
+      ],
+      "answer_justification": "Option (d) is correct. The work required is MgL/18."
+    },
+
+    "common_mistakes": [
+      {
+        "mistake": "Taking full length L instead of L/3",
+        "consequence": "Gets MgL or MgL/3",
+        "correct_approach": "Only one-third of chain is hanging"
+      },
+      {
+        "mistake": "Not considering center of mass at L/6",
+        "consequence": "Gets MgL/9 instead of MgL/18",
+        "correct_approach": "COM of hanging part is at its middle, i.e., L/6 below edge"
+      },
+      {
+        "mistake": "Using total mass M instead of M/3",
+        "consequence": "Wrong answer by factor of 3",
+        "correct_approach": "Only hanging portion mass is M/3"
+      }
+    ],
+
+    "alternative_approaches": [
+      {
+        "method": "Integration method",
+        "explanation": "Integrate dW = (M/L)g·x·dx from 0 to L/3",
+        "formula": "W = ∫₀^(L/3) (M/L)gx dx = (M/L)g[x²/2]₀^(L/3) = MgL/18"
+      }
+    ],
+
+    "key_insights": [
+      "For uniform objects, work depends on COM displacement",
+      "Variable mass systems require careful consideration of mass distribution",
+      "Potential energy change equals work done against gravity"
+    ],
+
+    "prerequisite_knowledge": [
+      "Work done by gravity",
+      "Center of mass of uniform objects",
+      "Gravitational potential energy"
+    ],
+
+    "related_problems": ["ROPE_PULLING", "VARIABLE_MASS_SYSTEMS"],
+
+    "tags": ["work_done", "gravity", "center_of_mass", "chain_problem"],
+
+    "has_diagram": false,
+    "diagram_essential": false,
+
+    "metadata": {
+      "created_at": "2025-01-21T12:00:00Z",
+      "source": "JEE Previous Years - Work Power Energy PDF",
+      "quality_checked": true,
+      "last_updated": "2025-01-21T12:00:00Z"
+    }
+  },
+
+  {
+    "id": "WPE_Q2_CONSTANT_POWER",
+    "year": 1984,
+    "exam": "JEE Main",
+    "date": "2M",
+    "chapter": "Work, Power and Energy",
+    "topic": "Power and Motion",
+    "subtopics": ["Constant Power", "Work-Energy Theorem", "Variable Force"],
+    "text": "A body is moved along a straight line by a machine delivering constant power. The distance moved by the body in time t is proportional to:",
+    "type": "objective_single_correct",
+    "options": [
+      {"id": "a", "text": "t^(1/2)"},
+      {"id": "b", "text": "t^(3/4)"},
+      {"id": "c", "text": "t^(3/2)"},
+      {"id": "d", "text": "t²"}
+    ],
+    "correct_answer": "c",
+    "numerical_answer": 1.5,
+    "units": "power of t",
+    "difficulty": "hard",
+    "marks": 2,
+
+    "given_data": {
+      "power": {"value": "P (constant)", "unit": "W", "symbol": "P"},
+      "initial_velocity": {"value": 0, "unit": "m/s", "symbol": "u"}
+    },
+
+    "concepts_required": [
+      "Power definition",
+      "Work-energy theorem",
+      "Integration",
+      "Dimensional analysis"
+    ],
+
+    "formulas_used": [
+      "P = dW/dt",
+      "W = Pt (for constant power)",
+      "W = ½mv²",
+      "v = ds/dt"
+    ],
+
+    "ncert_mapping": {
+      "class": 11,
+      "chapter": "Work, Energy and Power",
+      "chapter_number": 6,
+      "relevant_sections": ["6.6", "6.7"],
+      "ncert_examples": ["Example 6.9"]
+    },
+
+    "official_solution": {
+      "steps": [
+        {
+          "step_number": 1,
+          "description": "Apply work-energy theorem",
+          "formula": "W = Pt = ½mv²",
+          "calculation": "Pt = ½mv²",
+          "explanation": "Work done by constant power P in time t equals kinetic energy gained"
+        },
+        {
+          "step_number": 2,
+          "description": "Express velocity in terms of time",
+          "calculation": "v² = 2Pt/m",
+          "result": "v = √(2Pt/m) ∝ t^(1/2)"
+        },
+        {
+          "step_number": 3,
+          "description": "Relate velocity to displacement",
+          "formula": "v = ds/dt",
+          "calculation": "ds/dt = k·t^(1/2), where k = √(2P/m)"
+        },
+        {
+          "step_number": 4,
+          "description": "Integrate to find displacement",
+          "calculation": "∫ds = ∫k·t^(1/2) dt",
+          "result": "s = k·(t^(3/2))/(3/2) = (2k/3)·t^(3/2)"
+        },
+        {
+          "step_number": 5,
+          "description": "Conclude proportionality",
+          "result": "s ∝ t^(3/2)"
+        }
+      ],
+      "answer_justification": "Option (c) is correct. Distance is proportional to t^(3/2)."
+    },
+
+    "common_mistakes": [
+      {
+        "mistake": "Assuming constant force instead of constant power",
+        "consequence": "Gets s ∝ t² incorrectly",
+        "correct_approach": "Power is constant, force varies with velocity"
+      },
+      {
+        "mistake": "Using s = vt directly",
+        "consequence": "Gets s ∝ t^(3/2) but without proper justification",
+        "correct_approach": "Must integrate v(t) to get s(t)"
+      }
+    ],
+
+    "alternative_approaches": [
+      {
+        "method": "Dimensional analysis",
+        "explanation": "s = P^a × m^b × t^c. Solving dimensions: [L] = [ML²T⁻³]^a × [M]^b × [T]^c",
+        "formula": "Solving: a=1/2, b=-1/2, c=3/2, giving s ∝ t^(3/2)"
+      }
+    ],
+
+    "key_insights": [
+      "Constant power means variable force",
+      "Velocity increases as t^(1/2) under constant power",
+      "Integration needed when dealing with variable quantities",
+      "Dimensional analysis can verify results"
+    ],
+
+    "prerequisite_knowledge": [
+      "Power and work relationship",
+      "Work-energy theorem",
+      "Integration",
+      "Kinematics"
+    ],
+
+    "related_problems": ["VARIABLE_FORCE_MOTION", "POWER_VELOCITY"],
+
+    "tags": ["power", "work_energy", "integration", "motion"],
+
+    "has_diagram": false,
+    "diagram_essential": false,
+
+    "metadata": {
+      "created_at": "2025-01-21T12:10:00Z",
+      "source": "JEE Previous Years - Work Power Energy PDF",
+      "quality_checked": true,
+      "last_updated": "2025-01-21T12:10:00Z"
+    }
+  },
+
+  {
+    "id": "WPE_Q3_SPRING_EXTENSION",
+    "year": 2002,
+    "exam": "JEE Main",
+    "date": "2M",
+    "chapter": "Work, Power and Energy",
+    "topic": "Conservation of Energy with Springs",
+    "subtopics": ["Spring Potential Energy", "Gravitational PE", "Energy Conservation"],
+    "text": "An ideal spring with spring constant k is hung from the ceiling and a block of mass M is attached to its lower end. The mass is released with the spring initially unstretched. What is the maximum extension in the spring?",
+    "type": "objective_single_correct",
+    "options": [
+      {"id": "a", "text": "4Mg/k"},
+      {"id": "b", "text": "2Mg/k"},
+      {"id": "c", "text": "Mg/k"},
+      {"id": "d", "text": "Mg/2k"}
+    ],
+    "correct_answer": "b",
+    "numerical_answer": 2,
+    "units": "Mg/k",
+    "difficulty": "medium",
+    "marks": 2,
+
+    "given_data": {
+      "spring_constant": {"value": "k", "unit": "N/m", "symbol": "k"},
+      "mass": {"value": "M", "unit": "kg", "symbol": "M"},
+      "initial_extension": {"value": 0, "unit": "m", "symbol": "x₀"},
+      "gravity": {"value": "g", "unit": "m/s²", "symbol": "g"}
+    },
+
+    "concepts_required": [
+      "Conservation of mechanical energy",
+      "Elastic potential energy",
+      "Gravitational potential energy",
+      "Equilibrium position vs maximum extension"
+    ],
+
+    "formulas_used": [
+      "PE_spring = ½kx²",
+      "PE_gravity = mgh",
+      "Total energy conservation: ΔPE_grav + ΔPE_spring = 0"
+    ],
+
+    "ncert_mapping": {
+      "class": 11,
+      "chapter": "Work, Energy and Power",
+      "chapter_number": 6,
+      "relevant_sections": ["6.5", "6.9"],
+      "ncert_examples": ["Example 6.7"]
+    },
+
+    "official_solution": {
+      "steps": [
+        {
+          "step_number": 1,
+          "description": "Set up energy conservation equation",
+          "explanation": "Initially: spring unstretched at height h=0. Finally: spring extended by x, mass lowered by x"
+        },
+        {
+          "step_number": 2,
+          "description": "Write initial and final energies",
+          "calculation": "Initial: E_i = 0 (taking this as reference)",
+          "explanation": "Final: E_f = -Mgx + ½kx²"
+        },
+        {
+          "step_number": 3,
+          "description": "Apply conservation of energy",
+          "formula": "E_i = E_f",
+          "calculation": "0 = -Mgx + ½kx²",
+          "explanation": "Decrease in gravitational PE = Increase in elastic PE"
+        },
+        {
+          "step_number": 4,
+          "description": "Solve for maximum extension",
+          "calculation": "Mgx = ½kx²",
+          "result": "x = 2Mg/k (excluding x=0 solution)"
+        },
+        {
+          "step_number": 5,
+          "description": "Note about equilibrium position",
+          "explanation": "Equilibrium position is at x_eq = Mg/k. Maximum extension is twice this value due to kinetic energy at equilibrium."
+        }
+      ],
+      "answer_justification": "Option (b) is correct. Maximum extension is 2Mg/k."
+    },
+
+    "common_mistakes": [
+      {
+        "mistake": "Confusing equilibrium position with maximum extension",
+        "consequence": "Gets Mg/k (option c) instead of 2Mg/k",
+        "correct_approach": "At equilibrium Mg = kx_eq, but mass continues moving down due to KE"
+      },
+      {
+        "mistake": "Not considering gravitational PE change",
+        "consequence": "Using only ½kx² = 0",
+        "correct_approach": "Must include both spring PE and gravitational PE"
+      },
+      {
+        "mistake": "Wrong sign for gravitational PE",
+        "consequence": "Gets wrong equation",
+        "correct_approach": "Mass goes down, so gravitational PE decreases (negative sign)"
+      }
+    ],
+
+    "alternative_approaches": [
+      {
+        "method": "Force method with energy",
+        "explanation": "At max extension v=0. Using F=Ma and integrating",
+        "formula": "Net force: F = Mg - kx; At max extension, all energy converted"
+      }
+    ],
+
+    "key_insights": [
+      "Maximum extension is twice the equilibrium extension",
+      "Energy transfers: GPE → KE → Elastic PE",
+      "At maximum extension, velocity is zero",
+      "Spring PE is always positive (½kx²)"
+    ],
+
+    "prerequisite_knowledge": [
+      "Conservation of energy",
+      "Spring potential energy",
+      "Gravitational potential energy",
+      "Simple harmonic motion basics"
+    ],
+
+    "related_problems": ["SPRING_MASS_SYSTEM", "VERTICAL_OSCILLATIONS"],
+
+    "tags": ["spring", "energy_conservation", "potential_energy", "oscillations"],
+
+    "has_diagram": false,
+    "diagram_essential": false,
+
+    "metadata": {
+      "created_at": "2025-01-21T12:20:00Z",
+      "source": "JEE Previous Years - Work Power Energy PDF",
+      "quality_checked": true,
+      "last_updated": "2025-01-21T12:20:00Z"
+    }
+  },
+
+  {
+    "id": "WPE_Q4_MOMENTUM_ENERGY",
+    "year": 1980,
+    "exam": "JEE Main",
+    "date": "2M",
+    "chapter": "Work, Power and Energy",
+    "topic": "Momentum and Kinetic Energy Relation",
+    "subtopics": ["Linear Momentum", "Kinetic Energy", "Mass-Energy Relations"],
+    "text": "Two masses of 1 g and 4 g are moving with equal kinetic energies. What is the ratio of the magnitudes of their momenta?",
+    "type": "objective_single_correct",
+    "options": [
+      {"id": "a", "text": "4:1"},
+      {"id": "b", "text": "2:1"},
+      {"id": "c", "text": "1:2"},
+      {"id": "d", "text": "1:16"}
+    ],
+    "correct_answer": "c",
+    "numerical_answer": 0.5,
+    "units": "ratio",
+    "difficulty": "easy",
+    "marks": 2,
+
+    "given_data": {
+      "mass_1": {"value": 1, "unit": "g", "symbol": "m₁"},
+      "mass_2": {"value": 4, "unit": "g", "symbol": "m₂"},
+      "kinetic_energy": {"value": "K (same for both)", "unit": "J", "symbol": "K"}
+    },
+
+    "concepts_required": [
+      "Kinetic energy formula",
+      "Momentum formula",
+      "Relationship between KE and momentum",
+      "Ratio calculations"
+    ],
+
+    "formulas_used": [
+      "K = ½mv²",
+      "p = mv",
+      "K = p²/(2m)",
+      "p = √(2mK)"
+    ],
+
+    "ncert_mapping": {
+      "class": 11,
+      "chapter": "Work, Energy and Power",
+      "chapter_number": 6,
+      "relevant_sections": ["6.4", "6.5"],
+      "ncert_examples": ["Example 6.4"]
+    },
+
+    "official_solution": {
+      "steps": [
+        {
+          "step_number": 1,
+          "description": "Express momentum in terms of kinetic energy",
+          "formula": "K = ½mv² and p = mv",
+          "calculation": "K = ½m(p/m)² = p²/(2m)",
+          "explanation": "Rearranging: p² = 2mK"
+        },
+        {
+          "step_number": 2,
+          "description": "Write momentum for both masses",
+          "calculation": "p₁ = √(2m₁K) and p₂ = √(2m₂K)",
+          "explanation": "Since K is same for both"
+        },
+        {
+          "step_number": 3,
+          "description": "Find ratio of momenta",
+          "formula": "p₁/p₂ = √(m₁/m₂)",
+          "calculation": "p₁/p₂ = √(1/4) = 1/2"
+        },
+        {
+          "step_number": 4,
+          "description": "Express as ratio",
+          "result": "p₁ : p₂ = 1 : 2"
+        }
+      ],
+      "answer_justification": "Option (c) is correct. The ratio is 1:2."
+    },
+
+    "common_mistakes": [
+      {
+        "mistake": "Taking ratio of masses directly",
+        "consequence": "Gets 1:4",
+        "correct_approach": "Momentum ratio involves square root of mass ratio when KE is same"
+      },
+      {
+        "mistake": "Inverting the ratio",
+        "consequence": "Gets 2:1 instead of 1:2",
+        "correct_approach": "p ∝ √m, so lighter mass has less momentum"
+      },
+      {
+        "mistake": "Using p = mv without relating to equal KE",
+        "consequence": "Cannot solve without velocities",
+        "correct_approach": "Use p = √(2mK) relation"
+      }
+    ],
+
+    "alternative_approaches": [
+      {
+        "method": "Direct calculation",
+        "explanation": "If K₁ = K₂, then ½m₁v₁² = ½m₂v₂²",
+        "formula": "v₁/v₂ = √(m₂/m₁) = 2; Then p₁/p₂ = (m₁v₁)/(m₂v₂) = (1×2)/(4×1) = 1/2"
+      }
+    ],
+
+    "key_insights": [
+      "For equal KE, momentum ratio = √(mass ratio)",
+      "Lighter object with same KE has less momentum but higher velocity",
+      "p² ∝ mK relationship is useful",
+      "Momentum and KE are independent quantities"
+    ],
+
+    "prerequisite_knowledge": [
+      "Kinetic energy definition",
+      "Linear momentum definition",
+      "Algebraic manipulation",
+      "Square root relationships"
+    ],
+
+    "related_problems": ["MOMENTUM_ENERGY_COLLISION", "KE_COMPARISON"],
+
+    "tags": ["momentum", "kinetic_energy", "mass_ratio", "fundamental_concepts"],
+
+    "has_diagram": false,
+    "diagram_essential": false,
+
+    "metadata": {
+      "created_at": "2025-01-21T12:30:00Z",
+      "source": "JEE Previous Years - Work Power Energy PDF",
+      "quality_checked": true,
+      "last_updated": "2025-01-21T12:30:00Z"
+    }
+  }
+]
