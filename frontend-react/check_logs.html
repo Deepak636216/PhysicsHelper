@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head><title>Debug Logs</title></head>
+<body>
+<h1>LocalStorage Debug</h1>
+<pre id="output"></pre>
+<script>
+const output = document.getElementById('output');
+let debug = '';
+
+// Check all localStorage keys
+debug += '=== All LocalStorage Keys ===\n';
+for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    debug += `${key}\n`;
+}
+
+debug += '\n=== JEE Conversation Logs ===\n';
+const logs = localStorage.getItem('jee_conversation_logs');
+if (logs) {
+    debug += `Found logs: ${logs.length} characters\n`;
+    debug += JSON.stringify(JSON.parse(logs), null, 2);
+} else {
+    debug += 'No logs found!\n';
+}
+
+debug += '\n=== Student ID ===\n';
+const studentId = localStorage.getItem('jee_student_id');
+debug += studentId ? studentId : 'No student ID found!';
+
+output.textContent = debug;
+</script>
+</body>
+</html>
