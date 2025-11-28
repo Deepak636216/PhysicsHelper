@@ -63,11 +63,16 @@ class SessionService:
             "state": initial_state or {
                 "current_topic": topic,
                 "current_problem_id": None,
+                "original_problem": None,
                 "interaction_count": 0,
                 "hints_provided": 0,
+                "hints_used": 0,  # Track user-requested hints (max 3)
+                "max_hints": 3,
                 "tools_used": [],
                 "agents_used": [],
-                "conversation_history": []
+                "conversation_history": [],
+                "lightweight_progress": {},  # Real-time progress tracking
+                "ground_truth": None  # Store ground truth for progress evaluation
             }
         }
 
@@ -336,6 +341,119 @@ class SessionService:
             del self.sessions[session_id]
             return True
         return False
+
+    def increment_hints_used(self, session_id: str) -> bool:
+        """
+        Increment hints_used counter (max 3).
+
+        Args:
+            session_id: Session identifier
+
+        Returns:
+            True if successful, False if session not found or max hints reached
+        """
+        session = self.get_session(session_id)
+        if session is None:
+            return False
+
+        if session["state"]["hints_used"] >= session["state"]["max_hints"]:
+            return False  # Max hints reached
+
+        session["state"]["hints_used"] += 1
+        session["last_active"] = datetime.now().isoformat()
+        return True
+
+    def get_hints_remaining(self, session_id: str) -> int:
+        """
+        Get number of hints remaining.
+
+        Args:
+            session_id: Session identifier
+
+        Returns:
+            Number of hints remaining (0-3), or -1 if session not found
+        """
+        session = self.get_session(session_id)
+        if session is None:
+            return -1
+
+        max_hints = session["state"]["max_hints"]
+        used = session["state"]["hints_used"]
+        return max_hints - used
+
+    def set_ground_truth(
+        self,
+        session_id: str,
+        ground_truth: Dict[str, Any]
+    ) -> bool:
+        """
+        Store ground truth solution for this session.
+
+        Args:
+            session_id: Session identifier
+            ground_truth: Ground truth solution data
+
+        Returns:
+            True if successful, False if session not found
+        """
+        session = self.get_session(session_id)
+        if session is None:
+            return False
+
+        session["state"]["ground_truth"] = ground_truth
+        session["last_active"] = datetime.now().isoformat()
+        return True
+
+    def get_ground_truth(self, session_id: str) -> Optional[Dict[str, Any]]:
+        """
+        Retrieve ground truth solution for this session.
+
+        Args:
+            session_id: Session identifier
+
+        Returns:
+            Ground truth data or None if not found
+        """
+        session = self.get_session(session_id)
+        if session is None:
+            return None
+
+        return session["state"].get("ground_truth")
+
+    def set_original_problem(self, session_id: str, problem: str) -> bool:
+        """
+        Store the original problem statement.
+
+        Args:
+            session_id: Session identifier
+            problem: Problem statement text
+
+        Returns:
+            True if successful, False if session not found
+        """
+        session = self.get_session(session_id)
+        if session is None:
+            return False
+
+        session["state"]["original_problem"] = problem
+        session["last_active"] = datetime.now().isoformat()
+        return True
+
+    def get_original_problem(self, session_id: str) -> Optional[str]:
+        """
+        Retrieve the original problem statement.
+
+        Args:
+            session_id: Session identifier
+
+        Returns:
+            Problem statement or None if not found
+        """
+        session = self.get_session(session_id)
+        if session is None:
+            return None
+
+        return session["state"].get("original_problem")
 
 
 # Example usage and testing

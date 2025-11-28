@@ -79,11 +79,14 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
         }
 
         .session-info .info-left {
             display: flex;
             gap: 20px;
+            flex-wrap: wrap;
         }
 
         .session-info span {
@@ -99,6 +102,33 @@
             border-radius: 12px;
             font-size: 12px;
             font-weight: 600;
+        }
+
+        .progress-container {
+            width: 100%;
+            margin-top: 8px;
+            display: none; /* Hidden by default, shown when progress > 0 */
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #e2e8f0;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+            transition: width 0.3s ease;
+            border-radius: 3px;
+        }
+
+        .progress-text {
+            font-size: 11px;
+            color: #64748b;
+            margin-top: 4px;
         }
 
         .chat-area {
@@ -143,6 +173,30 @@
             color: #1e293b;
             border-bottom-left-radius: 4px;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .message.hint .message-content {
+            background: #fef3c7;
+            color: #92400e;
+            border-left: 4px solid #f59e0b;
+            border-bottom-left-radius: 4px;
+            box-shadow: 0 1px 3px rgba(245, 158, 11, 0.1);
+        }
+
+        .message.solution .message-content {
+            background: #d1fae5;
+            color: #065f46;
+            border-left: 4px solid #10b981;
+            border-bottom-left-radius: 4px;
+            box-shadow: 0 1px 3px rgba(16, 185, 129, 0.1);
+        }
+
+        .message.progress-feedback .message-content {
+            background: #e0e7ff;
+            color: #3730a3;
+            border-left: 4px solid #6366f1;
+            border-bottom-left-radius: 4px;
+            box-shadow: 0 1px 3px rgba(99, 102, 241, 0.1);
         }
 
         .agent-badge {
@@ -223,6 +277,16 @@
         .action-btn.solution:hover {
             background: #d1fae5;
             border-color: #10b981;
+        }
+
+        .action-btn.new-question {
+            border-color: #60a5fa;
+            color: #1e40af;
+        }
+
+        .action-btn.new-question:hover {
+            background: #dbeafe;
+            border-color: #3b82f6;
         }
 
         .input-area {
@@ -365,8 +429,14 @@
             <div class="info-left">
                 <span id="sessionId">Session: Not started</span>
                 <span id="interactionCount">Messages: <span class="badge">0</span></span>
+                <span id="hintsInfo">Hints: <span class="badge">0/3</span></span>
             </div>
-            <span id="agentsUsed">Agent: None</span>
+            <span id="progressInfo">Progress: <span class="badge">0%</span></span>
+            <div class="progress-container" id="progressContainer">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                </div>
+            </div>
         </div>
 
         <div class="chat-area" id="chatArea">
@@ -391,6 +461,9 @@
             </button>
             <button class="action-btn solution" onclick="requestSolution()">
                 <span class="btn-icon">✓</span> Show Solution
+            </button>
+            <button class="action-btn new-question" onclick="startNewQuestion()">
+                <span class="btn-icon">🔄</span> New Question
             </button>
         </div>
 
@@ -477,12 +550,128 @@
             }
         }
 
-        function requestHint() {
-            sendMessage('hint');
+        async function requestHint() {
+            if (!sessionId) {
+                addError('Start a conversation first before requesting hints.');
+                return;
+            }
+
+            showLoading();
+
+            try {
+                const response = await fetch(`${API_URL}/api/request-hint`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        student_id: STUDENT_ID,
+                        session_id: sessionId
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                hideLoading();
+
+                if (data.success) {
+                    // Add hint to chat
+                    addMessage(data.hint, 'hint');
+
+                    // Update hints counter
+                    updateHintsInfo(data.hints_used, data.hints_remaining);
+                } else {
+                    // Max hints reached
+                    addError(data.message);
+                }
+
+            } catch (error) {
+                hideLoading();
+                console.error('Error:', error);
+                addError('Failed to get hint. Please try again.');
+            }
         }
 
-        function requestSolution() {
-            sendMessage('solution please');
+        async function requestSolution() {
+            if (!sessionId) {
+                addError('Start a conversation first before requesting the solution.');
+                return;
+            }
+
+            showLoading();
+
+            try {
+                const response = await fetch(`${API_URL}/api/request-solution`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        student_id: STUDENT_ID,
+                        session_id: sessionId
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                hideLoading();
+
+                // Update progress display
+                updateProgressInfo(data.progress_percentage);
+
+                if (data.solution_unlocked) {
+                    // Full solution unlocked
+                    addMessage(`${data.feedback}\n\n**Solution:**\n${data.solution}\n\n**Final Answer:** ${data.final_answer}`, 'solution');
+                } else if (data.solution) {
+                    // Partial solution (40-49%)
+                    addMessage(`${data.feedback}\n\n${data.solution}`, 'solution');
+                } else {
+                    // Locked (< 40%)
+                    addMessage(data.feedback, 'progress-feedback');
+                    if (data.missing_concepts && data.missing_concepts.length > 0) {
+                        addMessage(`**Missing Concepts:** ${data.missing_concepts.join(', ')}`, 'progress-feedback');
+                    }
+                }
+
+            } catch (error) {
+                hideLoading();
+                console.error('Error:', error);
+                addError('Failed to evaluate solution request. Please try again.');
+            }
+        }
+
+        function startNewQuestion() {
+            // Clear the current session
+            sessionId = null;
+
+            // Clear the chat area
+            const chatArea = document.getElementById('chatArea');
+            chatArea.innerHTML = '';
+
+            // Reset progress and hints
+            updateProgressInfo(0);
+            updateHintsInfo(0, 3);
+
+            // Show welcome message
+            const welcomeDiv = document.createElement('div');
+            welcomeDiv.className = 'welcome-message';
+            welcomeDiv.innerHTML = `
+                <h2>Welcome to JEE Physics Tutor! 🎓</h2>
+                <p>
+                    I'm your AI-powered physics tutor, here to help you master JEE physics through guided learning.
+                    Use the Hint and Solution buttons below for help!
+                </p>
+            `;
+            chatArea.appendChild(welcomeDiv);
+
+            // Focus on input
+            document.getElementById('userInput').focus();
         }
 
         function addMessage(content, role, agent = null) {
@@ -552,9 +741,37 @@
             document.getElementById('interactionCount').innerHTML =
                 `Messages: <span class="badge">${data.metadata.interaction_count}</span>`;
 
-            const agentName = data.agent_used.replace('_', ' ').toUpperCase();
-            document.getElementById('agentsUsed').textContent =
-                `Agent: ${agentName}`;
+            // Update hints info
+            if (data.metadata.hints_used !== undefined && data.metadata.hints_remaining !== undefined) {
+                updateHintsInfo(data.metadata.hints_used, data.metadata.hints_remaining);
+            }
+
+            // Update progress
+            if (data.metadata.progress_score !== undefined) {
+                updateProgressInfo(data.metadata.progress_score);
+            }
+        }
+
+        function updateHintsInfo(hintsUsed, hintsRemaining) {
+            const total = hintsUsed + hintsRemaining;
+            document.getElementById('hintsInfo').innerHTML =
+                `Hints: <span class="badge">${hintsUsed}/${total}</span>`;
+        }
+
+        function updateProgressInfo(progressPercentage) {
+            progressPercentage = Math.min(100, Math.max(0, progressPercentage));
+
+            document.getElementById('progressInfo').innerHTML =
+                `Progress: <span class="badge">${progressPercentage}%</span>`;
+
+            // Update progress bar
+            const progressFill = document.getElementById('progressFill');
+            const progressContainer = document.getElementById('progressContainer');
+
+            if (progressPercentage > 0) {
+                progressContainer.style.display = 'block';
+                progressFill.style.width = `${progressPercentage}%`;
+            }
         }
 
         // Focus input on load

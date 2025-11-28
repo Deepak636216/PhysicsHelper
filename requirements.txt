@@ -1,7 +1,6 @@
 # JEE-Helper Physics Tutor - Requirements
 
-# Google AI & ADK (install first - they define dependency versions)
-google-adk==0.1.0
+# Google AI SDK (simple, no agent framework needed)
 google-genai>=1.9.0
 
 # Core Framework (compatible with google-adk)
@@ -12,6 +11,9 @@ python-dotenv>=1.0.0
 
 # CORS support
 python-multipart>=0.0.12
+
+# Async support
+nest-asyncio>=1.6.0
 
 # Optional: For development/testing
 pytest>=8.3.0

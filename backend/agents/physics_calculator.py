@@ -7,10 +7,6 @@ Specialized agent for performing physics calculations with step-by-step work.
 
 from google import genai
 from google.genai import types
-from google.adk.agents import Agent
-from google.adk.models.google_llm import Gemini
-from google.adk.runners import InMemoryRunner
-from google.adk.tools import google_search
 from typing import Optional
 
 
@@ -40,22 +36,11 @@ class PhysicsCalculatorAgent:
         self.use_search = use_search
         self.system_instruction = self._create_system_instruction()
 
-        # Create search-enabled calculator agent for complex problems
+        # Store search instruction for complex problems
         if self.use_search:
-            self.search_calculator = Agent(
-                name="SearchEnabledCalculator",
-                model=Gemini(
-                    model=self.model,
-                    api_key=self.api_key,
-                ),
-                instruction=self._create_search_instruction(),
-                tools=[google_search],
-                output_key="verified_calculation",
-            )
-            # Create runner with the agent
-            self.runner = InMemoryRunner(agent=self.search_calculator)
+            self.search_instruction = self._create_search_instruction()
         else:
-            self.runner = None
+            self.search_instruction = None
 
     def _create_system_instruction(self) -> str:
         """Create the system instruction for the calculator agent."""
@@ -207,17 +192,26 @@ If problem requires moment of inertia of a ring about diameter:
         """
         import asyncio
 
-        async def search_and_calculate():
-            result = await self.runner.run(
-                agent=self.search_calculator,
-                input_data={"problem": problem}
+        # Use GenAI client with Google Search tool (synchronous)
+        prompt = f"""{self.search_instruction}
+
+Problem: {problem}
+
+Use Google Search to verify formulas and concepts, then provide the calculation."""
+
+        try:
+            response = self.client.models.generate_content(
+                model=self.model,
+                contents=prompt,
+                config=types.GenerateContentConfig(
+                    temperature=0.1,
+                    max_output_tokens=1024,
+                    tools=[types.Tool(google_search={})]
+                )
             )
-
-            if result and "verified_calculation" in result:
-                return result["verified_calculation"]
-            return "Could not verify calculation with search."
-
-        return asyncio.run(search_and_calculate())
+            return response.text if response.text else "Could not verify calculation with search."
+        except Exception as e:
+            return f"Error in search-enabled calculation: {e}"
 
     def verify_calculation(self, problem: str, student_answer: str) -> str:
         """

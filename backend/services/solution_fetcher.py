@@ -9,11 +9,7 @@ Fetches verified solutions for physics problems using:
 Solutions are fetched BEFORE teaching to ensure accuracy.
 """
 
-from google.adk.agents import Agent
-from google.adk.models.google_llm import Gemini
-from google.adk.runners import InMemoryRunner
-from google.adk.tools import google_search
-from google.genai import types
+from google import genai
 from typing import Optional, Dict, Any, Tuple
 import logging
 
@@ -41,27 +37,11 @@ class SolutionFetcher:
         self.api_key = api_key
         self.model = model
 
-        # Retry configuration
-        self.retry_config = types.GenerateContentConfig(
-            temperature=0.1,  # Low temperature for factual accuracy
-            top_p=0.95,
-            max_output_tokens=2048,
-        )
+        # Create GenAI client
+        self.client = genai.Client(api_key=api_key)
 
-        # Create Physics Solution Researcher agent
-        self.solution_agent = Agent(
-            name="PhysicsSolutionResearcher",
-            model=Gemini(
-                model=self.model,
-                api_key=self.api_key,
-            ),
-            instruction=self._create_researcher_instruction(),
-            tools=[google_search],
-            output_key="verified_solution",
-        )
-
-        # Create runner with the agent
-        self.runner = InMemoryRunner(agent=self.solution_agent)
+        # System instruction for solution research
+        self.researcher_instruction = self._create_researcher_instruction()
 
     def _create_researcher_instruction(self) -> str:
         """Create instruction for the solution researcher agent."""
@@ -103,7 +83,7 @@ IMPORTANT:
 - Flag if solution seems uncertain or conflicting
 """
 
-    async def fetch_solution(
+    def fetch_solution(
         self,
         problem: str,
         context: Optional[Dict[str, Any]] = None
@@ -124,27 +104,27 @@ IMPORTANT:
             logger.info(f"Fetching solution for problem: {problem[:100]}...")
 
             # Step 1: Try MCP Knowledge Base (TODO: implement when MCP available)
-            # mcp_solution = await self._try_mcp(problem, context)
+            # mcp_solution = self._try_mcp(problem, context)
             # if mcp_solution:
             #     logger.info("Solution found in MCP knowledge base")
             #     return mcp_solution, "mcp"
 
-            # Step 2: Try Google Search via ADK
-            search_solution = await self._search_solution(problem, context)
+            # Step 2: Try Google Search via GenAI SDK
+            search_solution = self._search_solution(problem, context)
             if search_solution and search_solution.get('confidence') in ['high', 'medium']:
                 logger.info("Solution found via Google Search")
                 return search_solution, "search"
 
             # Step 3: Fallback to model reasoning
             logger.info("Using model reasoning as fallback")
-            model_solution = await self._model_solution(problem, context)
+            model_solution = self._model_solution(problem, context)
             return model_solution, "model"
 
         except Exception as e:
             logger.error(f"Error fetching solution: {e}")
             return None, None
 
-    async def _search_solution(
+    def _search_solution(
         self,
         problem: str,
         context: Optional[Dict[str, Any]] = None
@@ -163,17 +143,43 @@ IMPORTANT:
             # Build search query
             search_query = self._build_search_query(problem, context)
 
-            # Run solution researcher agent
-            result = await self.runner.run(
-                agent=self.solution_agent,
-                input_data={"problem": problem, "search_query": search_query}
+            # Use GenAI client with Google Search tool
+            prompt = f"""{self.researcher_instruction}
+
+Problem: {problem}
+
+Search Query: {search_query}
+
+Use Google Search to find verified solutions and provide:
+1. Final answer
+2. Key physics concepts involved
+3. Step-by-step solution
+4. Confidence level (high/medium/low)"""
+
+            # Generate content with Google Search tool
+            response = self.client.models.generate_content(
+                model=self.model,
+                contents=prompt,
+                config=genai.types.GenerateContentConfig(
+                    temperature=0.1,
+                    max_output_tokens=2048,
+                    tools=[genai.types.Tool(google_search={})]
+                )
             )
 
-            # Extract solution from agent output
-            if result and "verified_solution" in result:
-                solution = result["verified_solution"]
-                logger.info(f"Search found solution with confidence: {solution.get('confidence', 'unknown')}")
-                return solution
+            # Extract solution text
+            solution_text = response.text if response.text else None
+
+            # Parse solution from response
+            if solution_text:
+                # Basic parsing - could be enhanced with structured output
+                return {
+                    "final_answer": solution_text,
+                    "confidence": "medium",
+                    "key_concepts": [],  # Could parse from solution_text
+                    "solution_steps": [],  # Could parse from solution_text
+                    "detailed_solution": solution_text
+                }
 
             return None
 
@@ -211,7 +217,7 @@ IMPORTANT:
 
         return " ".join(query_parts)
 
-    async def _model_solution(
+    def _model_solution(
         self,
         problem: str,
         context: Optional[Dict[str, Any]] = None

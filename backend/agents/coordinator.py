@@ -316,7 +316,7 @@ When routing, simply provide a natural transition like:
         context: Optional[Dict[str, Any]] = None
     ) -> Optional[Dict[str, Any]]:
         """
-        Fetch ground truth solution for a problem.
+        Fetch ground truth solution for a problem (synchronous wrapper).
 
         This happens BEFORE teaching, silently in the background.
         The solution is NOT shown to the user, but used to guide teaching.
@@ -334,11 +334,8 @@ When routing, simply provide a natural transition like:
             if cache_key in self.ground_truth_cache:
                 return self.ground_truth_cache[cache_key]
 
-            # Fetch solution using SolutionFetcher
-            import asyncio
-            solution, source = asyncio.run(
-                self.solution_fetcher.fetch_solution(problem, context)
-            )
+            # Fetch solution using SolutionFetcher (synchronous call)
+            solution, source = self.solution_fetcher.fetch_solution(problem, context)
 
             if solution:
                 solution['source'] = source
